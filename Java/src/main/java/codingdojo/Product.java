@@ -20,25 +20,25 @@ public class Product implements ModelObject {
 	}
 
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	@Override
 	public String getId() {
-		return id;
+		return this.id;
 	}
 
 	@Override
 	public String toString() {
-		return "Product{" + name + '}';
+		return "Product{" + this.name + '}';
 	}
 
 	public long getWeight() {
-		return weight;
+		return this.weight;
 	}
 
 	public Price getPrice() {
-		return price;
+		return this.price;
 	}
 
 	public boolean isEvent() {

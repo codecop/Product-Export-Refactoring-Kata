@@ -12,21 +12,21 @@ public class Price {
 
 	@Override
 	public String toString() {
-		return "Price{" + amount + '}';
+		return "Price{" + this.amount + '}';
 	}
 
 	public String getCurrency() {
-		return currencyCode;
+		return this.currencyCode;
 	}
 
 	public double getAmount() {
-		return amount;
+		return this.amount;
 	}
 
 	public double getAmountInCurrency(String currencyCode) {
-		if (this.currencyCode.equals(currencyCode))
-			return amount;
-		else {
+		if (this.currencyCode.equals(currencyCode)) {
+			return this.amount;
+		} else {
 			throw new UnsupportedOperationException("shouldn't call this from a unit test, it will do a slow db lookup");
 		}
 	}

@@ -14,12 +14,12 @@ public class StoreEvent extends Product {
 
 	public void setLocation(Store locationStore) {
 		this.location = locationStore;
-		location.addStoreEvent(this);
+		this.location.addStoreEvent(this);
 	}
 
 	@Override
 	public String toString() {
-		return "StoreEvent{" + name + '}';
+		return "StoreEvent{" + this.name + '}';
 	}
 
 	@Override

@@ -18,7 +18,7 @@ public class Order implements ModelObject {
 		this.date = date;
 		this.store = store;
 		for (Product product : products) {
-			this.addProduct(product);
+			addProduct(product);
 		}
 	}
 
@@ -36,7 +36,7 @@ public class Order implements ModelObject {
 
 	@Override
 	public String toString() {
-		return "Order{" + id + '}';
+		return "Order{" + this.id + '}';
 	}
 
 	@Override
@@ -46,15 +46,15 @@ public class Order implements ModelObject {
 
 	@Override
 	public String getId() {
-		return id;
+		return this.id;
 	}
 
 	public Collection<Product> getProducts() {
-		return Collections.unmodifiableCollection(products);
+		return Collections.unmodifiableCollection(this.products);
 	}
 
 	public Date getDate() {
-		return date;
+		return this.date;
 	}
 
 	public void addProducts(Product... products) {

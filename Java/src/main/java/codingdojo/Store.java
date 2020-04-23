@@ -22,7 +22,7 @@ public class Store implements ModelObject {
 
 	public Store(String name, String id, Product[] products) {
 		this(name, id);
-		this.addStockedItems(products);
+		addStockedItems(products);
 	}
 
 	public void addStockedItems(Product... items) {
@@ -42,21 +42,21 @@ public class Store implements ModelObject {
 	}
 
 	public boolean hasItem(Product item) {
-		return itemsInStock.containsKey(item.getName());
+		return this.itemsInStock.containsKey(item.getName());
 	}
 
 	public Product getItem(String name) {
-		return itemsInStock.get(name);
+		return this.itemsInStock.get(name);
 	}
 
 	@Override
 	public String getId() {
-		return id;
+		return this.id;
 	}
 
 	@Override
 	public String toString() {
-		return "Store{" + name + '}';
+		return "Store{" + this.name + '}';
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class Store implements ModelObject {
 	}
 
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	public Collection<Product> getStock() {
