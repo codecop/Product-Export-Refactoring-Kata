@@ -1,8 +1,8 @@
 package codingdojo;
 
 public interface ModelObject {
-    String getId();
-    String toString();
-    void saveToDatabase();
+	String getId();
+	String toString();
+	void saveToDatabase();
 
 }
