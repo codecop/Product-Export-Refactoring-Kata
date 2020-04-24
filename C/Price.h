@@ -1,5 +1,5 @@
 extern struct Price* makePrice(double amount, char* currencyCode);
-extern char* toString(struct Price*);
-extern char* getCurrency(struct Price*);
-extern double getAmount(struct Price*);
-extern double getAmountInCurrency(struct Price*, char* currencyCode);
+extern char* PriceToString(struct Price* this);
+extern char* PriceGetCurrency(struct Price* this);
+extern double PriceGetAmount(struct Price* this);
+extern double PriceGetAmountInCurrency(struct Price* this, char* currencyCode);

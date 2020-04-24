@@ -15,24 +15,24 @@ struct Price* makePrice(double amount, char* currencyCode)
     return this;
 }
 
-char* toString(struct Price* this)
+char* PriceToString(struct Price* this)
 {
     char* buf = (char*)malloc(sizeof(char[7 + 5 + 1]));
     sprintf(buf, "Price{%f}", this->amount);
     return buf;
 }
 
-char* getCurrency(struct Price* this)
+char* PriceGetCurrency(struct Price* this)
 {
     return this->currencyCode;
 }
 
-double getAmount(struct Price* this)
+double PriceGetAmount(struct Price* this)
 {
     return this->amount;
 }
 
-double getAmountInCurrency(struct Price* this, char* currencyCode)
+double PriceGetAmountInCurrency(struct Price* this, char* currencyCode)
 {
     if (strcmp(this->currencyCode, currencyCode) == 0) {
         return this->amount;
