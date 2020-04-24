@@ -12,8 +12,8 @@ def convert_line(line)
     @@classname = $2
   end
 
-  typeName = /[A-Z]\w*/
-  type = /(?:#{typeName}|boolean|int|long|void|float|double|char\*)(?:\[\])?/
+  typeName = /[A-Z]\w*(?:<\w*>)?/
+  type = /(?:#{typeName}|boolean|int|long|void|float|double|char|bool|time_t)(?:\[\])?\*?/
   fieldName = /[a-z]\w*/
 
   line = line.
@@ -25,6 +25,9 @@ def convert_line(line)
     # map types
     gsub(/String /, 'char* ').
     gsub(/boolean /, 'bool ').
+    gsub(/Collection<(#{typeName})> /, '\\1* ').
+    gsub(/Date /, 'time_t ').
+
     # map fields
     gsub(/(?:private|protected) (?:final )?(#{type}) (#{fieldName})/, "\\1 \\2").
     # map class struct
@@ -34,11 +37,11 @@ def convert_line(line)
     # map declarations
     sub(/public #{@@classname}\(([^)]*)\) \{/, # constructor declaration
       "};\n\n" + # end of struct
-      "  #{struct}* make#{@@classname}(\\1) {\n" +
-      "  #{struct} *this = (#{struct} *)malloc(sizeof(#{struct}));").
+      "    #{struct}* make#{@@classname}(\\1) {\n" +
+      "        #{struct} *this = (#{struct} *)malloc(sizeof(#{struct}));").
     # add return this; - found by compile error
     # add this
-    gsub(/public (#{type}) (#{fieldName})\(([^)]*)\) \{/, "\\1 \\2(#{struct} *this, \\3) {"). # this
+    gsub(/public (#{type}) (#{fieldName})\(([^)]*)\) \{/, "\\1 #{@@classname}\\2(#{struct} *this, \\3) {"). # this
     gsub(/, \)/, ')'). # fix arguments introduced by this
     gsub(/this\./, 'this->'). # fix .
     # map single statements
@@ -65,6 +68,8 @@ def convert_line(line)
     @@used_types << $1
   elsif line =~ /(#{type}) #{fieldName}/
     @@used_types << $1
+  elsif line =~ /time_t /
+    @@used_types << 'time.h'
   elsif line =~ /malloc\(/
     @@used_types << 'stdlib.h'
   elsif line =~ /bool /
@@ -101,7 +106,7 @@ def to_c_file_name(java_name)
   java_name
 end
 
-Dir['Product.java'].each do |java_file|
+Dir['Order.java'].each do |java_file|
   java_lines = IO.readlines(java_file)
   c_lines = convert_source(java_lines)
   c_file = to_c_file_name(java_file[/^[^.]+/]) + '.c'
