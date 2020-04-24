@@ -1,5 +1,5 @@
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 struct Price {
@@ -15,24 +15,24 @@ struct Price* makePrice(double amount, char* currencyCode)
     return this;
 }
 
-char* PriceToString(struct Price* this)
+char* priceToString(struct Price* this)
 {
     char* buf = (char*)malloc(sizeof(char[7 + 5 + 1]));
     sprintf(buf, "Price{%f}", this->amount);
     return buf;
 }
 
-char* PriceGetCurrency(struct Price* this)
+char* getPriceCurrency(struct Price* this)
 {
     return this->currencyCode;
 }
 
-double PriceGetAmount(struct Price* this)
+double getPriceAmount(struct Price* this)
 {
     return this->amount;
 }
 
-double PriceGetAmountInCurrency(struct Price* this, char* currencyCode)
+double getPriceAmountInCurrency(struct Price* this, char* currencyCode)
 {
     if (strcmp(this->currencyCode, currencyCode) == 0) {
         return this->amount;

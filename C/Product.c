@@ -1,64 +1,70 @@
-#include "ModelObject.h"
-#include "Price.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "ModelObject.h"
+#include "Price.h"
+
 struct Product {
     struct ModelObject base;
     char* name;
-    char* id;
     long weight;
     struct Price* price;
 };
 
+char* productToString(void* product);
+void saveProductToDatabase(void* product);
+
 struct Product* makeProduct(char* name, char* id, long weight, struct Price* price)
 {
     struct Product* this = (struct Product*)malloc(sizeof(struct Product));
+    this->base.id = id;
+    this->base.toString = productToString;
+    this->base.saveToDatabase = saveProductToDatabase;
     this->name = name;
-    this->id = id;
     this->weight = weight;
     this->price = price;
     return this;
 }
 
-void ProductSaveToDatabase(struct Product* this)
+void saveProductToDatabase(void* product)
 {
-    (void) this; /* unused */
+    (void)product; /* unused, would cast to struct Product* */
     printf("Unsupported Operation %s\n",
            "missing from this exercise - shouldn't be called from a unit test");
     exit(1);
 }
 
-char* ProductGetName(struct Product* this)
+char* getProductName(struct Product* this)
 {
     return this->name;
 }
 
-char* ProductGetId(struct Product* this)
+char* getProductId(struct Product* this)
 {
-    return this->id;
+    return this->base.id;
 }
 
-char* ProductToString(struct Product* this)
+char* productToString(void* product)
 {
+    struct Product* this = (struct Product*)product;
     char* buf = (char*)malloc(sizeof(char[8 + 20 + 1]));
     sprintf(buf, "Product{%s}", this->name);
     return buf;
 }
 
-long ProductGetWeight(struct Product* this)
+long getProductWeight(struct Product* this)
 {
     return this->weight;
 }
 
-struct Price* ProductGetPrice(struct Product* this)
+struct Price* getProductPrice(struct Product* this)
 {
     return this->price;
 }
 
-bool ProductIsEvent(struct Product* this)
+bool isProductEvent(struct Product* this)
 {
-    (void) this; /* unused */
+    (void)this; /* unused */
     return false;
 }
