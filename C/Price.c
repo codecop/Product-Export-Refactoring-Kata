@@ -22,14 +22,14 @@ char* priceToString(struct Price* this)
     return buf;
 }
 
-char* getPriceCurrency(struct Price* this)
-{
-    return this->currencyCode;
-}
-
 double getPriceAmount(struct Price* this)
 {
     return this->amount;
+}
+
+char* getPriceCurrency(struct Price* this)
+{
+    return this->currencyCode;
 }
 
 double getPriceAmountInCurrency(struct Price* this, char* currencyCode)

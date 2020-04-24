@@ -12,8 +12,8 @@ struct Product {
     struct Price* price;
 };
 
-char* productToString(void* product);
-void saveProductToDatabase(void* product);
+static char* productToString(void* product);
+static void saveProductToDatabase(void* product);
 
 struct Product* makeProduct(char* name, char* id, long weight, struct Price* price)
 {
@@ -27,7 +27,15 @@ struct Product* makeProduct(char* name, char* id, long weight, struct Price* pri
     return this;
 }
 
-void saveProductToDatabase(void* product)
+static char* productToString(void* product)
+{
+    struct Product* this = (struct Product*)product;
+    char* buf = (char*)malloc(sizeof(char[8 + 20 + 1]));
+    sprintf(buf, "Product{%s}", this->name);
+    return buf;
+}
+
+static void saveProductToDatabase(void* product)
 {
     (void)product; /* unused, would cast to struct Product* */
     printf("Unsupported Operation %s\n",
@@ -38,19 +46,6 @@ void saveProductToDatabase(void* product)
 char* getProductName(struct Product* this)
 {
     return this->name;
-}
-
-char* getProductId(struct Product* this)
-{
-    return this->base.id;
-}
-
-char* productToString(void* product)
-{
-    struct Product* this = (struct Product*)product;
-    char* buf = (char*)malloc(sizeof(char[8 + 20 + 1]));
-    sprintf(buf, "Product{%s}", this->name);
-    return buf;
 }
 
 long getProductWeight(struct Product* this)
