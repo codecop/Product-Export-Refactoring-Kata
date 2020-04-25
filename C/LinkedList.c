@@ -1,11 +1,8 @@
 #include <stdlib.h>
 
-struct LinkedList {
-    void* data;
-    struct LinkedList* next;
-};
+#include "LinkedList.h"
 
-void linkedListInsert(struct LinkedList** head, void* data)
+void linkedListAppend(struct LinkedList** head, const void* data)
 {
     struct LinkedList *newNode, *temp;
 

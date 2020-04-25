@@ -1,7 +1,8 @@
 #include <stdbool.h>
 
-#include "ModelObject.h"
 #include "Price.h"
+
+struct Product;
 
 extern const struct Product* makeProduct(char* name, char* id, long weight, struct Price* price);
 extern const char* getProductName(const struct Product* this);

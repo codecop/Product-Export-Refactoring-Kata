@@ -77,7 +77,7 @@ const struct LinkedList* getOrderProducts(const struct Order* this)
 
 void addOrderProduct(struct Order* this, const struct Product* product)
 {
-    linkedListInsert(&this->products, (void*)product);
+    linkedListAppend(&this->products, (void*)product);
 }
 
 void addOrderProducts(struct Order* this, const struct LinkedList* products)

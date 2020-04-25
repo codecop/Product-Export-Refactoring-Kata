@@ -1,8 +1,11 @@
-#include <stdlib.h>
+#ifndef LINKED_LIST
+#define LINKED_LIST
 
 struct LinkedList {
-    void* data;
+    const void* data;
     struct LinkedList* next;
 };
 
-extern void linkedListInsert(struct LinkedList** head, void* data);
+extern void linkedListAppend(struct LinkedList** head, const void* data);
+
+#endif

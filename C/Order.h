@@ -1,7 +1,10 @@
 #include <time.h>
 
+#include "LinkedList.h"
 #include "Product.h"
 #include "Store.h"
+
+struct Order;
 
 extern struct Order* makeOrder(char* id, time_t date, struct Store* store, struct LinkedList* products);
 extern double orderTotalDollars(const struct Order* this);

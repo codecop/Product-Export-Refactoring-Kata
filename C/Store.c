@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #include "LinkedList.h"
+#include "LinkedMap.h"
 #include "ModelObject.h"
 #include "Product.h"
 #include "StoreEvent.h"
@@ -13,7 +14,7 @@
  */
 struct Store {
     struct ModelObject base;
-    /*final Map<String, Product> itemsInStock = new HashMap<String, Product>(); TODO */
+    struct LinkedMap* itemsInStock; /* Map<String, Product> */
     const char* name;
     const char* id;
 };
@@ -30,6 +31,7 @@ struct Store* makeStore(const char* name, const char* id, const struct LinkedLis
     this->base.getId = getStoreId;
     this->base.toString = storeToString;
     this->base.saveToDatabase = saveStoreToDatabase;
+    this->itemsInStock = NULL;
     this->name = name;
     this->id = id;
     storeAddStockedItems(this, products);
@@ -67,47 +69,40 @@ void storeAddStockedItems(struct Store* this, const struct LinkedList* products)
 {
     for (const struct LinkedList* node = products; node; node = node->next) {
         const struct Product* item = (const struct Product*)node->data;
-        /*
-        this->itemsInStock.put(getProductName(item), item);
-        */
+        const char* itemName = getProductName(item);
+        linkedMapPut(&this->itemsInStock, itemName, item);
     }
 }
 
 void storeAddStoreEvent(struct Store* this, const struct StoreEvent* storeEvent)
 {
-    /*
-    this->itemsInStock.put(getStoreEventName(storeEvent), storeEvent);
-    */
+    const char* storeEventName = getStoreEventName(storeEvent);
+    linkedMapPut(&this->itemsInStock, storeEventName, storeEvent);
 }
 
 void storeRemoveStockedItems(struct Store* this, const struct LinkedList* items)
 {
     for (const struct LinkedList* node = items; node; node = node->next) {
         const struct Product* item = (const struct Product*)node->data;
-        /*
-        this->itemsInStock.remove(getProductName(item));
-        */
+        const char* productName = getProductName(item);
+        linkedMapRemove(&this->itemsInStock, productName);
     }
 }
 
 bool storeHasItem(const struct Store* this, const struct Product* item)
 {
-    /*
-    return this->itemsInStock.containsKey(getProductName(item));
-    */
-    return false;
+    const char* productName = getProductName(item);
+    return linkedMapContains(this->itemsInStock, productName);
 }
 
 const struct Product* storeGetItem(const struct Store* this, const char* name)
 {
-    /*
-    return this->itemsInStock.get(name);
-    */
-    return NULL;
+    return (const struct Product*)linkedMapGet(this->itemsInStock, name);
 }
 
-struct LinkedList* getStoreStock(const struct Store* this)
+const struct LinkedList* getStoreStock(const struct Store* this)
 {
+    (void)this;
     /*
     return Collections.unmodifiableCollection(this->itemsInStock.values());
     */

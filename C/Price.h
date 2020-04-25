@@ -1,3 +1,5 @@
+struct Price;
+
 extern const struct Price* makePrice(double amount, char* currencyCode);
 extern const char* priceToString(const struct Price* this);
 extern double getPriceAmount(const struct Price* this);
