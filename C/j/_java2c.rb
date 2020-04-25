@@ -13,7 +13,7 @@ def convert_line(line)
   end
 
   typeName = /[A-Z]\w*(?:<\w*>)?/
-  type = /(?:#{typeName}|boolean|int|long|void|float|double|char|bool|time_t)(?:\[\])?\*?/
+  type = /(?:#{typeName}|boolean|int|long|void|float|double)(?:\[\])?\*?/
   fieldName = /[a-z]\w*/
 
   line = line.
@@ -22,16 +22,12 @@ def convert_line(line)
     sub(/^import (.*);/, ''). # imports
     sub(/@Override/, ''). # annotations
     sub(/@SuppressWarnings\("[^"]+"\)/, '').
-    # map types
-    gsub(/String /, 'char* ').
-    gsub(/boolean /, 'bool ').
-    gsub(/Collection<(#{typeName})> /, '\\1* ').
-    gsub(/Date /, 'time_t ').
 
     # map fields
     gsub(/(?:private|protected) (?:final )?(#{type}) (#{fieldName})/, "\\1 \\2").
     # map class struct
     sub(/public class (#{typeName}) implements (#{typeName}) \{/, "struct \\1 {\n\t\\2 base;").
+    sub(/public class (#{typeName}) extends (#{typeName}) \{/, "struct \\1 {\n\t\\2 base;").
     sub(/public class (#{typeName}) \{/, "struct \\1 {").
     gsub(/^\}\n/, ''). # remove end of class
     # map declarations
@@ -47,35 +43,35 @@ def convert_line(line)
     # map single statements
     gsub(/throw new UnsupportedOperationException\(("[^"]+")\);/, 'printf("Unsupported Operation %s\\n", \\1); exit(1);').
 
-#    sub(/System\.out\.println/, "console.log"). # println
-#    sub(/(public|private) (#{type}) (\w+\([^)]*\))/, "\\1 \\3: \\2"). # method return type order
-#    sub(/(#{type}) (\w+\([^)]*\));/, "\\2: \\1;"). # abstract method return type order
-#    sub(/(private|public|^\s*) (#{type}) (\w+)(;| |=)/, "\\1 \\3: \\2\\4"). # fields type order
-#    gsub(/(\(| )(#{type}) (\w+)(,|\))/, "\\1\\3: \\2\\4"). # parameter type order
-#    # map types
-#    # gsub(/(#{type})\[\]/, "Array<\\1>"). # array type
-#    gsub(/String/, "string"). # string type
-#    sub(/new LinkedList\(\)/, "[]").
-#    gsub(/LinkedList/, "any[]").
-#    gsub(/Integer/, "number").
-#    gsub(/: int/, ": number").
-#    # map operators
-#    gsub(/ == /, " === ").
-#    gsub(/ != /, " !== ")
-    sub(/foobarbaz/, 'foobarbaz') # fake last statement
+    # map types
+    gsub(/String /, 'const char* ').
+    gsub(/boolean /, 'bool ').
+    gsub(/Collection<(#{typeName})> /, 'struct LinkedList* ').
+    gsub(/Date /, 'time_t ').
+
+    # fake last statement
+    sub(/foobarbaz/, 'foobarbaz')
 
   if line =~ /(?:: |extends |implements |new )(#{type})/
     @@used_types << $1
-  elsif line =~ /(#{type}) #{fieldName}/
-    @@used_types << $1
-  elsif line =~ /time_t /
-    @@used_types << 'time.h'
-  elsif line =~ /malloc\(/
-    @@used_types << 'stdlib.h'
-  elsif line =~ /bool /
-    @@used_types << 'stdbool.h'
-  elsif line =~ /printf/
-    @@used_types << 'stdio.h'
+  end
+  if line =~ /(#{type}) #{fieldName}/
+    @@used_types << $1.sub(/\*$/, '')
+  end
+  if line =~ /time_t /
+    @@used_types << 'time'
+  end
+  if line =~ /malloc/
+    @@used_types << 'stdlib'
+  end
+  if line =~ /bool /
+    @@used_types << 'stdbool'
+  end
+  if line =~ /struct LinkedList/
+    @@used_types << 'LinkedList'
+  end
+  if line =~ /printf/
+    @@used_types << 'stdio'
   end
 
   line.rstrip
@@ -87,10 +83,14 @@ def convert_source(lines)
   code = lines.map { |line| convert_line(line) }
 
   imports = @@used_types.
-    find_all { |t| t =~ /^[A-Z]/ }.
+    # find_all { |t| t =~ /^[A-Z]/ }.
     reject { |t| t == 'Random' }.
     sort.uniq.
-    map { |t| "#include \"#{to_c_file_name(t)}.h\"" }
+    map do |t|
+      t =~ /^[a-z]/ ?
+      "#include <#{to_c_file_name(t)}.h>" :
+      "#include \"#{to_c_file_name(t)}.h\""
+    end
 
   imports + code
 end
@@ -106,7 +106,7 @@ def to_c_file_name(java_name)
   java_name
 end
 
-Dir['Order.java'].each do |java_file|
+Dir['StoreEvent.java'].each do |java_file|
   java_lines = IO.readlines(java_file)
   c_lines = convert_source(java_lines)
   c_file = to_c_file_name(java_file[/^[^.]+/]) + '.c'
