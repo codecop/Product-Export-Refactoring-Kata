@@ -7,6 +7,6 @@ struct LinkedMap {
 };
 
 extern void linkedMapPut(struct LinkedMap** head, const char* name, const void* data);
-extern void* linkedMapRemove(struct LinkedMap** head, const char* name);
-extern bool linkedMapContains(const struct LinkedMap*, const char* name);
-extern void* linkedMapGet(const struct LinkedMap* head, const char* name);
+extern const void* linkedMapRemove(struct LinkedMap** head, const char* name);
+extern bool linkedMapContains(const struct LinkedMap* head, const char* name);
+extern const void* linkedMapGet(const struct LinkedMap* head, const char* name);

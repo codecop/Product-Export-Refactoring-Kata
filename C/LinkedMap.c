@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "LinkedMap.h"
 
@@ -23,17 +24,17 @@ void linkedMapPut(struct LinkedMap** head, const char* name, const void* data)
     }
 }
 
-void* linkedMapRemove(struct LinkedMap** head, const char* name)
+const void* linkedMapRemove(struct LinkedMap** head, const char* name)
 {
     return NULL;
 }
 
-bool linkedMapContains(const struct LinkedMap*, const char* name)
+bool linkedMapContains(const struct LinkedMap* head, const char* name)
 {
     return false;
 }
 
-void* linkedMapGet(const struct LinkedMap* head, const char* name)
+const void* linkedMapGet(const struct LinkedMap* head, const char* name)
 {
     return NULL;
 }
