@@ -31,9 +31,9 @@ struct Store* makeStore(const char* name, const char* id, const struct LinkedLis
     this->base.getId = getStoreId;
     this->base.toString = storeToString;
     this->base.saveToDatabase = saveStoreToDatabase;
-    this->itemsInStock = NULL;
     this->name = name;
     this->id = id;
+    this->itemsInStock = NULL;
     storeAddStockedItems(this, products);
     return this;
 }
@@ -65,12 +65,12 @@ const char* getStoreName(const struct Store* this)
     return this->name;
 }
 
-void storeAddStockedItems(struct Store* this, const struct LinkedList* products)
+void storeAddStockedItems(struct Store* this, const struct LinkedList* items)
 {
-    for (const struct LinkedList* node = products; node; node = node->next) {
+    for (const struct LinkedList* node = items; node; node = node->next) {
         const struct Product* item = (const struct Product*)node->data;
-        const char* itemName = getProductName(item);
-        linkedMapPut(&this->itemsInStock, itemName, item);
+        const char* productName = getProductName(item);
+        linkedMapPut(&this->itemsInStock, productName, item);
     }
 }
 
@@ -78,15 +78,6 @@ void storeAddStoreEvent(struct Store* this, const struct StoreEvent* storeEvent)
 {
     const char* storeEventName = getStoreEventName(storeEvent);
     linkedMapPut(&this->itemsInStock, storeEventName, storeEvent);
-}
-
-void storeRemoveStockedItems(struct Store* this, const struct LinkedList* items)
-{
-    for (const struct LinkedList* node = items; node; node = node->next) {
-        const struct Product* item = (const struct Product*)node->data;
-        const char* productName = getProductName(item);
-        linkedMapRemove(&this->itemsInStock, productName);
-    }
 }
 
 bool storeHasItem(const struct Store* this, const struct Product* item)
@@ -102,9 +93,5 @@ const struct Product* storeGetItem(const struct Store* this, const char* name)
 
 const struct LinkedList* getStoreStock(const struct Store* this)
 {
-    (void)this;
-    /*
-    return Collections.unmodifiableCollection(this->itemsInStock.values());
-    */
-    return NULL;
+    return linkedMapValues(this->itemsInStock);
 }

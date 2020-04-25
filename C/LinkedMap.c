@@ -1,4 +1,3 @@
-#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -24,17 +23,31 @@ void linkedMapPut(struct LinkedMap** head, const char* name, const void* data)
     }
 }
 
-const void* linkedMapRemove(struct LinkedMap** head, const char* name)
-{
-    return NULL;
-}
-
 bool linkedMapContains(const struct LinkedMap* head, const char* name)
 {
+    for (const struct LinkedMap* node = head; node; node = node->next) {
+        if (strcmp(node->name, name) == 0) {
+            return true;
+        }
+    }
     return false;
 }
 
 const void* linkedMapGet(const struct LinkedMap* head, const char* name)
 {
+    for (const struct LinkedMap* node = head; node; node = node->next) {
+        if (strcmp(node->name, name) == 0) {
+            return node->data;
+        }
+    }
     return NULL;
+}
+
+const struct LinkedList* linkedMapValues(const struct LinkedMap* head)
+{
+    struct LinkedList* list = NULL;
+    for (const struct LinkedMap* node = head; node; node = node->next) {
+        linkedListAppend(&list, node->data);
+    }
+    return list;
 }
