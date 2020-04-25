@@ -4,7 +4,7 @@
 
 struct Price {
     double amount;
-    char* currencyCode;
+    const char* currencyCode;
 };
 
 const struct Price* makePrice(double amount, char* currencyCode)

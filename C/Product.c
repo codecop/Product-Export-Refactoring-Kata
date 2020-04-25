@@ -7,10 +7,10 @@
 
 struct Product {
     struct ModelObject base;
-    char* id;
-    char* name;
+    const char* id;
+    const char* name;
     long weight;
-    struct Price* price;
+    const struct Price* price;
 };
 
 static const char* getProductId(void* product);
@@ -32,13 +32,13 @@ const struct Product* makeProduct(char* name, char* id, long weight, struct Pric
 
 static const char* getProductId(void* product)
 {
-    struct Product* this = (struct Product*)product;
+    const struct Product* this = (const struct Product*)product;
     return this->id;
 }
 
 static const char* productToString(void* product)
 {
-    struct Product* this = (struct Product*)product;
+    const struct Product* this = (const struct Product*)product;
     char* s = (char*)malloc(sizeof(char[9 + 20 + 1]));
     sprintf(s, "Product{%s}", this->name);
     return s;

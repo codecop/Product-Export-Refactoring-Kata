@@ -9,7 +9,7 @@
 
 struct Order {
     struct ModelObject base;
-    char* id;
+    const char* id;
     time_t date;
     struct Store* store;
     struct LinkedList* products;
@@ -45,13 +45,13 @@ double orderTotalDollars(const struct Order* this)
 
 static const char* getOrderId(void* order)
 {
-    struct Order* this = (struct Order*)order;
+    const struct Order* this = (const struct Order*)order;
     return this->id;
 }
 
 static const char* orderToString(void* order)
 {
-    struct Order* this = (struct Order*)order;
+    const struct Order* this = (const struct Order*)order;
     char* s = (char*)malloc(sizeof(char[7 + 20 + 1]));
     sprintf(s, "Order{%s}", this->id);
     return s;
