@@ -2,27 +2,24 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include "LinkedList.h"
 #include "ModelObject.h"
 #include "Product.h"
 #include "Store.h"
-
-#define MAX_ORDER 10
 
 struct Order {
     struct ModelObject base;
     char* id;
     time_t date;
     struct Store* store;
-    struct Product* products[MAX_ORDER + 1]; /* NULL terminated */
+    struct LinkedList* products;
 };
 
 static const char* getOrderId(void* order);
 static const char* orderToString(void* order);
 static void saveOrderToDatabase(void* order);
 
-void addOrderProducts(struct Order* this, struct Product* products[]);
-
-struct Order* makeOrder(char* id, time_t date, struct Store* store, struct Product* products[])
+struct Order* makeOrder(char* id, time_t date, struct Store* store, struct LinkedList* products)
 {
     struct Order* this = (struct Order*)malloc(sizeof(struct Order));
     this->base.getId = getOrderId;
@@ -31,18 +28,16 @@ struct Order* makeOrder(char* id, time_t date, struct Store* store, struct Produ
     this->id = id;
     this->date = date;
     this->store = store;
-    for (unsigned int i = 0; i <= MAX_ORDER; i++) {
-        this->products[i] = NULL;
-    }
-    addOrderProducts(this, products);
+    this->products = products;
     return this;
 }
 
 double orderTotalDollars(const struct Order* this)
 {
     double dollars = 0.0;
-    for (unsigned int i = 0; this->products[i] != NULL; i++) {
-        const struct Price* price = getProductPrice(this->products[i]);
+    for (struct LinkedList* node = this->products; node; node = node->next) {
+        const struct Product* product = (const struct Product*)node->data;
+        const struct Price* price = getProductPrice(product);
         dollars += getPriceAmountInCurrency(price, "USD");
     }
     return dollars;
@@ -75,28 +70,20 @@ time_t getOrderDate(const struct Order* this)
     return this->date;
 }
 
-const struct Product** getOrderProducts(const struct Order* this)
+const struct LinkedList* getOrderProducts(const struct Order* this)
 {
     return this->products;
 }
 
-void addOrderProduct(struct Order* this, struct Product* product)
+void addOrderProduct(struct Order* this, const struct Product* product)
 {
-    unsigned int i = 0;
-    while (this->products[i] != NULL) {
-        i += 1;
-    }
-    if (i < MAX_ORDER) {
-        this->products[i] = product;
-    }
-    /* ignored error handling :-( */
+    linkedListInsert(&this->products, (void*)product);
 }
 
-void addOrderProducts(struct Order* this, struct Product* products[])
+void addOrderProducts(struct Order* this, const struct LinkedList* products)
 {
-    unsigned int i = 0;
-    while (products[i] != NULL) {
-        addOrderProduct(this, products[i]);
-        i += 1;
+    for (const struct LinkedList* node = products; node; node = node->next) {
+        const struct Product* product = (const struct Product*)node->data;
+        addOrderProduct(this, product);
     }
 }
