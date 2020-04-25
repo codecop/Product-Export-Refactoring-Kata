@@ -2,8 +2,8 @@
 #define MODEL_OBJECT
 
 struct ModelObject {
-    char* id;
-    char* (*toString)(void* this);
+    const char* (*getId)(void* this);
+    const char* (*toString)(void* this);
     void (*saveToDatabase)(void* this);
 };
 

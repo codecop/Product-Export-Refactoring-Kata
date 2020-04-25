@@ -10,20 +10,25 @@
 
 struct Order {
     struct ModelObject base;
+    char* id;
     time_t date;
     struct Store* store;
     struct Product* products[MAX_ORDER + 1]; /* NULL terminated */
 };
 
-static char* orderToString(void* order);
+static const char* getOrderId(void* order);
+static const char* orderToString(void* order);
 static void saveOrderToDatabase(void* order);
+
+void addOrderProducts(struct Order* this, struct Product* products[]);
 
 struct Order* makeOrder(char* id, time_t date, struct Store* store, struct Product* products[])
 {
     struct Order* this = (struct Order*)malloc(sizeof(struct Order));
-    this->base.id = id;
+    this->base.getId = getOrderId;
     this->base.toString = orderToString;
     this->base.saveToDatabase = saveOrderToDatabase;
+    this->id = id;
     this->date = date;
     this->store = store;
     for (unsigned int i = 0; i <= MAX_ORDER; i++) {
@@ -33,12 +38,28 @@ struct Order* makeOrder(char* id, time_t date, struct Store* store, struct Produ
     return this;
 }
 
-static char* orderToString(void* order)
+double orderTotalDollars(const struct Order* this)
+{
+    double dollars = 0.0;
+    for (unsigned int i = 0; this->products[i] != NULL; i++) {
+        const struct Price* price = getProductPrice(this->products[i]);
+        dollars += getPriceAmountInCurrency(price, "USD");
+    }
+    return dollars;
+}
+
+static const char* getOrderId(void* order)
 {
     struct Order* this = (struct Order*)order;
-    char* buf = (char*)malloc(sizeof(char[7 + 20 + 1]));
-    sprintf(buf, "Order{%s}", this->base.id);
-    return buf;
+    return this->id;
+}
+
+static const char* orderToString(void* order)
+{
+    struct Order* this = (struct Order*)order;
+    char* s = (char*)malloc(sizeof(char[7 + 20 + 1]));
+    sprintf(s, "Order{%s}", this->id);
+    return s;
 }
 
 static void saveOrderToDatabase(void* order)
@@ -49,12 +70,12 @@ static void saveOrderToDatabase(void* order)
     exit(1);
 }
 
-time_t getOrderDate(struct Order* this)
+time_t getOrderDate(const struct Order* this)
 {
     return this->date;
 }
 
-struct Product** getOrderProducts(struct Order* this)
+const struct Product** getOrderProducts(const struct Order* this)
 {
     return this->products;
 }
@@ -78,14 +99,4 @@ void addOrderProducts(struct Order* this, struct Product* products[])
         addOrderProduct(this, products[i]);
         i += 1;
     }
-}
-
-double orderTotalDollars(struct Order* this)
-{
-    double dollars = 0.0;
-    for (unsigned int i = 0; this->products[i] != NULL; i++) {
-        struct Price* price = getProductPrice(this->products[i]);
-        dollars += getPriceAmountInCurrency(price, "USD");
-    }
-    return dollars;
 }
