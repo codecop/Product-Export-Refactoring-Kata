@@ -11,6 +11,7 @@ struct Product {
     const char* name;
     long weight;
     const struct Price* price;
+    bool isEvent;
 };
 
 static const char* getProductId(void* product);
@@ -27,6 +28,7 @@ const struct Product* makeProduct(char* name, char* id, long weight, struct Pric
     this->name = name;
     this->weight = weight;
     this->price = price;
+    this->isEvent = false;
     return this;
 }
 
@@ -69,6 +71,5 @@ const struct Price* getProductPrice(const struct Product* this)
 
 bool isProductEvent(const struct Product* this)
 {
-    (void)this; /* unused */
-    return false;
+    return this->isEvent;
 }
