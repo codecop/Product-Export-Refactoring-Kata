@@ -1,18 +1,13 @@
 #include "Price.h"
-/*#include "Store.h"*/
+#include "Product.h"
 
-struct StoreEvent;
-
-const struct StoreEvent* makeStoreEvent(const char* name,
-                                        const char* id,
-                                        /*
-                                        struct Store* location,
-                                        */
-                                        const struct Price* price);
-
-extern const char* getStoreEventName(const struct StoreEvent* storeEvent);
+const struct Product* makeStoreEvent(const char* name,
+                                     const char* id,
+                                     /*
+                                     struct Store* location,
+                                     */
+                                     const struct Price* price);
 
 /*
 extern void storeEventSetLocation(struct StoreEvent* this, struct Store* locationStore);
 */
-extern bool storeEventIsEvent(const struct StoreEvent* this);

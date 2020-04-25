@@ -6,7 +6,6 @@
 #include "LinkedMap.h"
 #include "ModelObject.h"
 #include "Product.h"
-#include "StoreEvent.h"
 
 /**
  * Represents a physical Store where you can go and buy products and attend
@@ -74,9 +73,9 @@ void storeAddStockedItems(struct Store* this, const struct LinkedList* items)
     }
 }
 
-void storeAddStoreEvent(struct Store* this, const struct StoreEvent* storeEvent)
+void storeAddStoreEvent(struct Store* this, const struct Product* storeEvent)
 {
-    const char* storeEventName = getStoreEventName(storeEvent);
+    const char* storeEventName = getProductName(storeEvent);
     linkedMapPut(&this->itemsInStock, storeEventName, storeEvent);
 }
 
