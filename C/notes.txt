@@ -1,2 +1,3 @@
-23.04.2020	2h	Project Setup, java2c (hilft nichts), 2 Files konvertiert.
-24.04.2020  2h  wieder 2 Files konvertiert.
+23.04.2020	2h	Project setup, java2c (generates cpp), 2 files done.
+24.04.2020	2h	again 2 files done.
+25.04.2020 	2.5h	Store and Store Event, more complex, not done.
