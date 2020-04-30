@@ -2,11 +2,16 @@
 
 #include "LinkedList.h"
 
+#ifndef LINKED_MAP
+#define LINKED_MAP
+
 struct LinkedMap {
     const char* name;
     const void* data;
     struct LinkedMap* next;
 };
+
+#endif
 
 extern struct LinkedMap* make_linked_map();
 extern void linked_map_put(struct LinkedMap** head, const char* name, const void* data);
