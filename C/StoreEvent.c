@@ -14,31 +14,31 @@ struct StoreEvent {
     /* struct Store* location; */
 };
 
-static const char* storeEventToString(void* storeEvent);
+static const char* store_event_to_string(void* storeEvent);
 
-const struct Product* makeStoreEvent(const char* name,
+const struct Product* make_store_event(const char* name,
                                      const char* id,
                                      /*struct Store* location,*/
                                      const struct Price* price)
 {
-    struct Product* this = makeProduct(name, id, 0, price);
-    this->base.toString = storeEventToString;
+    struct Product* this = make_product(name, id, 0, price);
+    this->base.toString = store_event_to_string;
     this->isEvent = true;
     /*
-    storeEventSetLocation(this, location);
+    store_event_set_location(this, location);
     */
     return this;
 }
 
 /*
-void storeEventSetLocation(struct StoreEvent* this, struct Store* locationStore)
+void store_event_set_location(struct StoreEvent* this, struct Store* locationStore)
 {
     this->location = locationStore;
-    storeAddStoreEvent(locationStore, this);
+    store_add_store_event(locationStore, this);
 }
 */
 
-static const char* storeEventToString(void* storeEvent)
+static const char* store_event_to_string(void* storeEvent)
 {
     const struct Product* this = (const struct Product*)storeEvent;
     char* s = (char*)malloc(sizeof(char[12 + 20 + 1]));

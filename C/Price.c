@@ -7,7 +7,7 @@ struct Price {
     const char* currencyCode;
 };
 
-const struct Price* makePrice(double amount, char* currencyCode)
+const struct Price* make_price(double amount, char* currencyCode)
 {
     struct Price* this = (struct Price*)malloc(sizeof(struct Price));
     this->amount = amount;
@@ -15,24 +15,24 @@ const struct Price* makePrice(double amount, char* currencyCode)
     return this;
 }
 
-const char* priceToString(const struct Price* this)
+const char* price_to_string(const struct Price* this)
 {
     char* s = (char*)malloc(sizeof(char[7 + 9 + 1]));
     sprintf(s, "Price{%f}", this->amount);
     return s;
 }
 
-double getPriceAmount(const struct Price* this)
+double get_price_amount(const struct Price* this)
 {
     return this->amount;
 }
 
-const char* getPriceCurrency(const struct Price* this)
+const char* get_price_currency(const struct Price* this)
 {
     return this->currencyCode;
 }
 
-double getPriceAmountInCurrency(const struct Price* this, char* currencyCode)
+double get_price_amount_in_currency(const struct Price* this, char* currencyCode)
 {
     if (strcmp(this->currencyCode, currencyCode) == 0) {
         return this->amount;

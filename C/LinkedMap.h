@@ -8,8 +8,8 @@ struct LinkedMap {
     struct LinkedMap* next;
 };
 
-extern void linkedMapPut(struct LinkedMap** head, const char* name, const void* data);
-extern const void* linkedMapRemove(struct LinkedMap** head, const char* name);
-extern bool linkedMapContains(const struct LinkedMap* head, const char* name);
-extern const void* linkedMapGet(const struct LinkedMap* head, const char* name);
-extern const struct LinkedList* linkedMapValues(const struct LinkedMap* map);
+extern void linked_map_put(struct LinkedMap** head, const char* name, const void* data);
+extern const void* linked_map_remove(struct LinkedMap** head, const char* name);
+extern bool linked_map_contains(const struct LinkedMap* head, const char* name);
+extern const void* linked_map_get(const struct LinkedMap* head, const char* name);
+extern const struct LinkedList* linked_map_values(const struct LinkedMap* map);

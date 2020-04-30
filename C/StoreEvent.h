@@ -1,7 +1,7 @@
 #include "Price.h"
 #include "Product.h"
 
-const struct Product* makeStoreEvent(const char* name,
+const struct Product* make_store_event(const char* name,
                                      const char* id,
                                      /*
                                      struct Store* location,
@@ -9,5 +9,5 @@ const struct Product* makeStoreEvent(const char* name,
                                      const struct Price* price);
 
 /*
-extern void storeEventSetLocation(struct StoreEvent* this, struct Store* locationStore);
+extern void store_event_set_location(struct StoreEvent* this, struct Store* locationStore);
 */

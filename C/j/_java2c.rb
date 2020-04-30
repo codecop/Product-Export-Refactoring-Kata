@@ -52,6 +52,18 @@ def convert_line(line)
     # fake last statement
     sub(/foobarbaz/, 'foobarbaz')
 
+  badMethodName = /[a-z]+[A-Z]\w+/
+  badMethodUse = /(?: |\))(#{badMethodName})\(/
+  # method name in declaration after type
+  # method name in expression after operator
+  # method name in expression with cast
+
+  if line =~ badMethodUse
+    name = $1
+    new_name = to_snake(name)
+    line = line.gsub(/#{name}\(/, new_name + '(')
+  end
+
   if line =~ /(?:: |extends |implements |new )(#{type})/
     @@used_types << $1
   end
@@ -75,6 +87,10 @@ def convert_line(line)
   end
 
   line.rstrip
+end
+
+def to_snake(name)
+  name.gsub(/([A-Z])/, '_\\1').downcase
 end
 
 def convert_source(lines)

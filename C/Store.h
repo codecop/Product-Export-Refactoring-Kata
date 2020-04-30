@@ -5,10 +5,10 @@
 
 struct Store;
 
-extern struct Store* makeStore(const char* name, const char* id, const struct LinkedList* products);
-extern const char* getStoreName(const struct Store* this);
-extern void storeAddStockedItems(struct Store* this, const struct LinkedList* products);
-extern void storeAddStoreEvent(struct Store* this, const struct Product* storeEvent);
-extern bool storeHasItem(const struct Store* this, const struct Product* item);
-extern const struct Product* storeGetItem(const struct Store* this, const char* name);
-extern const struct LinkedList* getStoreStock(const struct Store* this);
+extern struct Store* make_store(const char* name, const char* id, const struct LinkedList* products);
+extern const char* get_store_name(const struct Store* this);
+extern void store_add_stocked_items(struct Store* this, const struct LinkedList* products);
+extern void store_add_store_event(struct Store* this, const struct Product* storeEvent);
+extern bool store_has_item(const struct Store* this, const struct Product* item);
+extern const struct Product* store_get_item(const struct Store* this, const char* name);
+extern const struct LinkedList* get_store_stock(const struct Store* this);

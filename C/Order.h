@@ -6,9 +6,9 @@
 
 struct Order;
 
-extern struct Order* makeOrder(char* id, time_t date, struct Store* store, struct LinkedList* products);
-extern double orderTotalDollars(const struct Order* this);
-extern time_t getOrderDate(const struct Order* this);
-extern const struct LinkedList* getOrderProducts(const struct Order* this);
-extern void addOrderProduct(struct Order* this, const struct Product* product);
-extern void addOrderProducts(struct Order* this, const struct LinkedList* products);
+extern struct Order* make_order(char* id, time_t date, struct Store* store, struct LinkedList* products);
+extern double order_total_dollars(const struct Order* this);
+extern time_t get_order_date(const struct Order* this);
+extern const struct LinkedList* get_order_products(const struct Order* this);
+extern void add_order_product(struct Order* this, const struct Product* product);
+extern void add_order_products(struct Order* this, const struct LinkedList* products);

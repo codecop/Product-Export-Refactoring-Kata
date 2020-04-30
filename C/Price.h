@@ -1,7 +1,7 @@
 struct Price;
 
-extern const struct Price* makePrice(double amount, char* currencyCode);
-extern const char* priceToString(const struct Price* this);
-extern double getPriceAmount(const struct Price* this);
-extern const char* getPriceCurrency(const struct Price* this);
-extern double getPriceAmountInCurrency(const struct Price* this, char* currencyCode);
+extern const struct Price* make_price(double amount, char* currencyCode);
+extern const char* price_to_string(const struct Price* this);
+extern double get_price_amount(const struct Price* this);
+extern const char* get_price_currency(const struct Price* this);
+extern double get_price_amount_in_currency(const struct Price* this, char* currencyCode);

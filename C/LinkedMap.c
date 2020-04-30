@@ -3,7 +3,7 @@
 
 #include "LinkedMap.h"
 
-void linkedMapPut(struct LinkedMap** head, const char* name, const void* data)
+void linked_map_put(struct LinkedMap** head, const char* name, const void* data)
 {
     struct LinkedMap *newNode, *temp;
 
@@ -23,7 +23,7 @@ void linkedMapPut(struct LinkedMap** head, const char* name, const void* data)
     }
 }
 
-bool linkedMapContains(const struct LinkedMap* head, const char* name)
+bool linked_map_contains(const struct LinkedMap* head, const char* name)
 {
     for (const struct LinkedMap* node = head; node; node = node->next) {
         if (strcmp(node->name, name) == 0) {
@@ -33,7 +33,7 @@ bool linkedMapContains(const struct LinkedMap* head, const char* name)
     return false;
 }
 
-const void* linkedMapGet(const struct LinkedMap* head, const char* name)
+const void* linked_map_get(const struct LinkedMap* head, const char* name)
 {
     for (const struct LinkedMap* node = head; node; node = node->next) {
         if (strcmp(node->name, name) == 0) {
@@ -43,11 +43,11 @@ const void* linkedMapGet(const struct LinkedMap* head, const char* name)
     return NULL;
 }
 
-const struct LinkedList* linkedMapValues(const struct LinkedMap* head)
+const struct LinkedList* linked_map_values(const struct LinkedMap* head)
 {
     struct LinkedList* list = NULL;
     for (const struct LinkedMap* node = head; node; node = node->next) {
-        linkedListAppend(&list, node->data);
+        linked_list_append(&list, node->data);
     }
     return list;
 }

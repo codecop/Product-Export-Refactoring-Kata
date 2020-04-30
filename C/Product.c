@@ -14,16 +14,16 @@ struct Product {
     bool isEvent;
 };
 
-static const char* getProductId(void* product);
-static const char* productToString(void* product);
-static void saveProductToDatabase(void* product);
+static const char* get_product_id(void* product);
+static const char* product_to_string(void* product);
+static void save_product_to_database(void* product);
 
-const struct Product* makeProduct(char* name, char* id, long weight, struct Price* price)
+const struct Product* make_product(char* name, char* id, long weight, struct Price* price)
 {
     struct Product* this = (struct Product*)malloc(sizeof(struct Product));
-    this->base.getId = getProductId;
-    this->base.toString = productToString;
-    this->base.saveToDatabase = saveProductToDatabase;
+    this->base.getId = get_product_id;
+    this->base.toString = product_to_string;
+    this->base.saveToDatabase = save_product_to_database;
     this->id = id;
     this->name = name;
     this->weight = weight;
@@ -32,13 +32,13 @@ const struct Product* makeProduct(char* name, char* id, long weight, struct Pric
     return this;
 }
 
-static const char* getProductId(void* product)
+static const char* get_product_id(void* product)
 {
     const struct Product* this = (const struct Product*)product;
     return this->id;
 }
 
-static const char* productToString(void* product)
+static const char* product_to_string(void* product)
 {
     const struct Product* this = (const struct Product*)product;
     char* s = (char*)malloc(sizeof(char[9 + 20 + 1]));
@@ -46,7 +46,7 @@ static const char* productToString(void* product)
     return s;
 }
 
-static void saveProductToDatabase(void* product)
+static void save_product_to_database(void* product)
 {
     (void)product; /* unused */
     printf("Unsupported Operation %s\n",
@@ -54,22 +54,22 @@ static void saveProductToDatabase(void* product)
     exit(1);
 }
 
-const char* getProductName(const struct Product* this)
+const char* get_product_name(const struct Product* this)
 {
     return this->name;
 }
 
-long getProductWeight(const struct Product* this)
+long get_product_weight(const struct Product* this)
 {
     return this->weight;
 }
 
-const struct Price* getProductPrice(const struct Product* this)
+const struct Price* get_product_price(const struct Product* this)
 {
     return this->price;
 }
 
-bool isProductEvent(const struct Product* this)
+bool is_product_event(const struct Product* this)
 {
     return this->isEvent;
 }

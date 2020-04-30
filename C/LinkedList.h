@@ -6,6 +6,6 @@ struct LinkedList {
     struct LinkedList* next;
 };
 
-extern void linkedListAppend(struct LinkedList** head, const void* data);
+extern void linked_list_append(struct LinkedList** head, const void* data);
 
 #endif

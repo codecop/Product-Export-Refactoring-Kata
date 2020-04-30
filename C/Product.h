@@ -4,8 +4,8 @@
 
 struct Product;
 
-extern const struct Product* makeProduct(char* name, char* id, long weight, struct Price* price);
-extern const char* getProductName(const struct Product* this);
-extern long getProductWeight(const struct Product* this);
-extern const struct Price* getProductPrice(const struct Product* this);
-extern bool isProductEvent(const struct Product* this);
+extern const struct Product* make_product(char* name, char* id, long weight, struct Price* price);
+extern const char* get_product_name(const struct Product* this);
+extern long get_product_weight(const struct Product* this);
+extern const struct Price* get_product_price(const struct Product* this);
+extern bool is_product_event(const struct Product* this);

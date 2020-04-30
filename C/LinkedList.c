@@ -2,7 +2,7 @@
 
 #include "LinkedList.h"
 
-void linkedListAppend(struct LinkedList** head, const void* data)
+void linked_list_append(struct LinkedList** head, const void* data)
 {
     struct LinkedList *newNode, *temp;
 
