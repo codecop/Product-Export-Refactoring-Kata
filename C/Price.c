@@ -22,14 +22,14 @@ const char* price_to_string(const struct Price* this)
     return s;
 }
 
-double get_price_amount(const struct Price* this)
-{
-    return this->amount;
-}
-
 const char* get_price_currency(const struct Price* this)
 {
     return this->currencyCode;
+}
+
+double get_price_amount(const struct Price* this)
+{
+    return this->amount;
 }
 
 double get_price_amount_in_currency(const struct Price* this, char* currencyCode)

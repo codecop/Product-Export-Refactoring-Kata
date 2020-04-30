@@ -4,7 +4,6 @@
 
 #include "LinkedList.h"
 #include "LinkedMap.h"
-#include "ModelObject.h"
 #include "Product.h"
 
 /**
@@ -12,56 +11,21 @@
  * events.
  */
 struct Store {
-    struct ModelObject base;
-    struct LinkedMap* itemsInStock; /* Map<String, Product> */
+    struct LinkedMap* itemsInStock; /* Map<char*, Product> */
     const char* name;
     const char* id;
 };
 
-static const char* get_store_id(void* store);
-static const char* store_to_string(void* store);
-static void save_store_to_database(void* store);
-
-void store_add_stocked_items(struct Store* this, const struct LinkedList* products);
-
 struct Store* make_store(const char* name, const char* id, const struct LinkedList* products)
 {
+    void store_add_stocked_items(struct Store*, const struct LinkedList*);
+
     struct Store* this = (struct Store*)malloc(sizeof(struct Store));
-    this->base.getId = get_store_id;
-    this->base.toString = store_to_string;
-    this->base.saveToDatabase = save_store_to_database;
     this->name = name;
     this->id = id;
     this->itemsInStock = NULL;
     store_add_stocked_items(this, products);
     return this;
-}
-
-static const char* get_store_id(void* store)
-{
-    const struct Store* this = (const struct Store*)store;
-    return this->id;
-}
-
-static const char* store_to_string(void* store)
-{
-    const struct Store* this = (const struct Store*)store;
-    char* s = (char*)malloc(sizeof(char[7 + 20 + 1]));
-    sprintf(s, "Store{%s}", this->name);
-    return s;
-}
-
-static void save_store_to_database(void* store)
-{
-    (void)store; /* unused */
-    printf("Unsupported Operation %s\n",
-           "missing from this exercise - shouldn't be called from a unit test");
-    exit(1);
-}
-
-const char* get_store_name(const struct Store* this)
-{
-    return this->name;
 }
 
 void store_add_stocked_items(struct Store* this, const struct LinkedList* items)
@@ -79,6 +43,8 @@ void store_add_store_event(struct Store* this, const struct Product* storeEvent)
     linked_map_put(&this->itemsInStock, storeEventName, storeEvent);
 }
 
+/* skipped removeStockedItems */
+
 bool store_has_item(const struct Store* this, const struct Product* item)
 {
     const char* productName = get_product_name(item);
@@ -88,6 +54,31 @@ bool store_has_item(const struct Store* this, const struct Product* item)
 const struct Product* store_get_item(const struct Store* this, const char* name)
 {
     return (const struct Product*)linked_map_get(this->itemsInStock, name);
+}
+
+const char* get_store_id(const struct Store* this)
+{
+    return this->id;
+}
+
+const char* store_to_string(const struct Store* this)
+{
+    char* s = (char*)malloc(sizeof(char[7 + 20 + 1]));
+    sprintf(s, "Store{%s}", this->name);
+    return s;
+}
+
+void save_store_to_database(const struct Store* this)
+{
+    (void)this; /* unused */
+    printf("Unsupported Operation %s\n",
+           "missing from this exercise - shouldn't be called from a unit test");
+    exit(1);
+}
+
+const char* get_store_name(const struct Store* this)
+{
+    return this->name;
 }
 
 const struct LinkedList* get_store_stock(const struct Store* this)
