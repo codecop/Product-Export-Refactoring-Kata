@@ -40,6 +40,7 @@ def convert_line(line)
     gsub(/public (#{type}) (#{fieldName})\(([^)]*)\) \{/, "\\1 #{@@classname}\\2(#{struct} *this, \\3) {"). # this
     gsub(/, \)/, ')'). # fix arguments introduced by this
     gsub(/this\./, 'this->'). # fix .
+    gsub(/public static /, '').
     # map single statements
     gsub(/throw new UnsupportedOperationException\(("[^"]+")\);/, 'printf("Unsupported Operation %s\\n", \\1); exit(1);').
 
@@ -122,7 +123,7 @@ def to_c_file_name(java_name)
   java_name
 end
 
-Dir['Util.java'].each do |java_file|
+Dir['TaxCalculator.java'].each do |java_file|
   java_lines = IO.readlines(java_file)
   c_lines = convert_source(java_lines)
   c_file = to_c_file_name(java_file[/^[^.]+/]) + '.c'
