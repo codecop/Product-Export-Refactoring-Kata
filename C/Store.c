@@ -23,7 +23,7 @@ struct Store* make_store(const char* name, const char* id, const struct LinkedLi
     struct Store* this = (struct Store*)malloc(sizeof(struct Store));
     this->name = name;
     this->id = id;
-    this->itemsInStock = NULL;
+    this->itemsInStock = make_linked_map();
     store_add_stocked_items(this, products);
     return this;
 }

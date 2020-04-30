@@ -21,7 +21,7 @@ struct Order* make_order(const char* id, time_t date, struct Store* store, const
     this->id = id;
     this->date = date;
     this->store = store;
-    this->products = NULL;
+    this->products = make_linked_list();
     add_order_products(this, products);
     return this;
 }

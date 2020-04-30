@@ -3,6 +3,11 @@
 
 #include "LinkedMap.h"
 
+struct LinkedMap* make_linked_map()
+{
+    return NULL;
+}
+
 void linked_map_put(struct LinkedMap** head, const char* name, const void* data)
 {
     struct LinkedMap *newNode, *temp;
@@ -45,7 +50,7 @@ const void* linked_map_get(const struct LinkedMap* head, const char* name)
 
 const struct LinkedList* linked_map_values(const struct LinkedMap* head)
 {
-    struct LinkedList* list = NULL;
+    struct LinkedList* list = make_linked_list();
     for (const struct LinkedMap* node = head; node; node = node->next) {
         linked_list_append(&list, node->data);
     }

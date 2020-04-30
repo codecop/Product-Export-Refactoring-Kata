@@ -2,6 +2,11 @@
 
 #include "LinkedList.h"
 
+struct LinkedList* make_linked_list()
+{
+    return NULL;
+}
+
 void linked_list_append(struct LinkedList** head, const void* data)
 {
     struct LinkedList *newNode, *temp;
