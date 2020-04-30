@@ -4,6 +4,15 @@
 
 #include <cmocka.h>
 
+#include "Util.h"
+
+static void test_from_iso8601_utc(void** state)
+{
+    (void)state; /* unused */
+
+    assert_int_equal(1514764800L, from_iso8601_utc("2018-01-01T00:00Z"));
+}
+
 static void int_equal(void** state)
 {
     (void)state; /* unused */
@@ -21,8 +30,9 @@ static void stringt_equal(void** state)
 int main(void)
 {
     const struct CMUnitTest test_suite[] = {
-        cmocka_unit_test(int_equal),     /* */
-        cmocka_unit_test(stringt_equal), /* */
+        cmocka_unit_test(test_from_iso8601_utc), /* */
+        cmocka_unit_test(int_equal),             /* */
+        cmocka_unit_test(stringt_equal),         /* */
     };
 
     return cmocka_run_group_tests(test_suite, NULL, NULL);
