@@ -7,7 +7,7 @@ struct Price {
     const char* currencyCode;
 };
 
-const struct Price* make_price(double amount, char* currencyCode)
+const struct Price* make_price(double amount, const char* currencyCode)
 {
     struct Price* this = (struct Price*)malloc(sizeof(struct Price));
     this->amount = amount;
@@ -32,7 +32,7 @@ double get_price_amount(const struct Price* this)
     return this->amount;
 }
 
-double get_price_amount_in_currency(const struct Price* this, char* currencyCode)
+double get_price_amount_in_currency(const struct Price* this, const char* currencyCode)
 {
     if (strcmp(this->currencyCode, currencyCode) == 0) {
         return this->amount;
