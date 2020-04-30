@@ -9,17 +9,17 @@ struct Product {
     const char* id;
     long weight;
     const struct Price* price;
-    bool isEvent;
+    void* location; /* struct Store* */
 };
 
-const struct Product* make_product(char* name, char* id, long weight, struct Price* price)
+struct Product* make_product(const char* name, const char* id, long weight, const struct Price* price)
 {
     struct Product* this = (struct Product*)malloc(sizeof(struct Product));
     this->name = name;
     this->id = id;
     this->weight = weight;
     this->price = price;
-    this->isEvent = false;
+    this->location = NULL;
     return this;
 }
 
@@ -43,9 +43,18 @@ const char* get_product_id(const struct Product* this)
 
 const char* product_to_string(const struct Product* this)
 {
-    char* s = (char*)malloc(sizeof(char[9 + 20 + 1]));
-    sprintf(s, "Product{%s}", this->name);
-    return s;
+    bool is_product_event(const struct Product*);
+
+    if (is_product_event(this)) {
+        char* s = (char*)malloc(sizeof(char[12 + 20 + 1]));
+        sprintf(s, "StoreEvent{%s}", this->name);
+        return s;
+    }
+    else {
+        char* s = (char*)malloc(sizeof(char[9 + 20 + 1]));
+        sprintf(s, "Product{%s}", this->name);
+        return s;
+    }
 }
 
 long get_product_weight(const struct Product* this)
@@ -60,5 +69,10 @@ const struct Price* get_product_price(const struct Product* this)
 
 bool is_product_event(const struct Product* this)
 {
-    return this->isEvent;
+    return this->location != NULL;
+}
+
+void product_set_location(struct Product* this, void* locationStore)
+{
+    this->location = locationStore;
 }
