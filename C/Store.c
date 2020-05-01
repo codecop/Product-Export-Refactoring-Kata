@@ -6,7 +6,7 @@
 #include "LinkedMap.h"
 #include "Product.h"
 
-/**
+/*
  * Represents a physical Store where you can go and buy products and attend
  * events.
  */
