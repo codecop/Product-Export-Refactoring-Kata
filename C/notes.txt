@@ -3,3 +3,4 @@
 25.04.2020 	2.5h	Store and Store Event, more complex, not done.
 30.04.2020  2.5h	remove Polymorphy, finish StoreEvent. Util. TaxCalculator.
 01.05.2020  1h	sample objects, sample test
+            1.5h	XMLExporter with StringBuilder
