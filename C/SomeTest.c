@@ -7,6 +7,7 @@
 #include "LinkedList.h"
 #include "Price.h"
 #include "SampleModelObjects.h"
+#include "TaxCalculator.h"
 #include "Util.h"
 
 static void test_util_from_iso8601_utc(void** state)
@@ -50,6 +51,7 @@ static void test_linked_list_append(void** state)
 static void test_sample_product(void** state)
 {
     (void)state; /* unused */
+
     make_sample_model_objects();
 
     assert_string_equal("Cherry Bloom", get_product_name(CherryBloom));
@@ -59,6 +61,17 @@ static void test_sample_product(void** state)
     assert_int_equal(0, is_product_event(CherryBloom));
 }
 
+static void test_calculate_added_tax(void** state)
+{
+    (void)state; /* unused */
+
+    make_sample_model_objects();
+    struct LinkedList* orders = make_linked_list();
+    linked_list_append(&orders, RecentOrder);
+
+    assert_float_equal(20 + 149.99 * 0.25, calculate_added_tax(orders), 0.001);
+}
+
 int main(void)
 {
     const struct CMUnitTest test_suite[] = {
@@ -66,6 +79,7 @@ int main(void)
         cmocka_unit_test(test_price_functions),       /* */
         cmocka_unit_test(test_linked_list_append),    /* */
         cmocka_unit_test(test_sample_product),        /* */
+        cmocka_unit_test(test_calculate_added_tax),   /* */
     };
 
     return cmocka_run_group_tests(test_suite, NULL, NULL);
