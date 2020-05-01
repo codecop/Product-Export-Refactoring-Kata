@@ -2,6 +2,7 @@
 #include <stdarg.h> /* used by mocka */
 #include <stddef.h> /* used by mocka */
 
+#include "XMLExporter.h"
 #include <cmocka.h>
 
 static void test_foo(void** state)

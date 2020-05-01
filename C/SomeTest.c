@@ -10,6 +10,7 @@
 #include "StringBuilder.h"
 #include "TaxCalculator.h"
 #include "Util.h"
+#include "XMLExporter.h"
 #include <stdlib.h>
 #include <string.h>
 
