@@ -10,3 +10,4 @@ struct LinkedList {
 
 extern struct LinkedList* make_linked_list(void);
 extern void linked_list_append(struct LinkedList** head, const void* data);
+extern void destroy_linked_list(struct LinkedList* head);

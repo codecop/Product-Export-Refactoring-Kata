@@ -25,3 +25,13 @@ void linked_list_append(struct LinkedList** head, const void* data)
         *head = newNode;
     }
 }
+
+void destroy_linked_list(struct LinkedList* head)
+{
+    struct LinkedList* current = head;
+    while (current) {
+        struct LinkedList* toFree = current;
+        current = current->next;
+        free(toFree);
+    }
+}

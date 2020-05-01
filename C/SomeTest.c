@@ -9,6 +9,7 @@
 #include "SampleModelObjects.h"
 #include "TaxCalculator.h"
 #include "Util.h"
+#include <stdlib.h>
 
 static void test_util_from_iso8601_utc(void** state)
 {
@@ -26,6 +27,8 @@ static void test_price_functions(void** state)
     assert_float_equal(1.2, get_price_amount(price), 0.001);
     assert_float_equal(1.2, get_price_amount_in_currency(price, "USD"), 0.001);
     assert_string_equal("Price{1.200000}", price_to_string(price));
+
+    free((void*)price);
 }
 
 static void test_linked_list_append(void** state)
@@ -46,6 +49,8 @@ static void test_linked_list_append(void** state)
         sum += *i;
     }
     assert_int_equal(6, sum);
+
+    destroy_linked_list(ll);
 }
 
 static void test_sample_product(void** state)
@@ -70,6 +75,8 @@ static void test_calculate_added_tax(void** state)
     linked_list_append(&orders, RecentOrder);
 
     assert_float_equal(20 + 149.99 * 0.25, calculate_added_tax(orders), 0.001);
+
+    destroy_linked_list(orders);
 }
 
 int main(void)

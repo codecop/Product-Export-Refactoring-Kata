@@ -42,6 +42,7 @@ void make_sample_model_objects(void)
     struct LinkedList* storeProducts = make_linked_list();
     linked_list_append(&storeProducts, CherryBloom);
     FlagshipStore = make_store("Nordstan", "4189", storeProducts);
+    destroy_linked_list(storeProducts);
 
     /* Store events add themselves to the stocked items at their store */
     Masterclass = make_store_event("Eyeshadow Masterclass", "EVENT01",
@@ -53,4 +54,5 @@ void make_sample_model_objects(void)
     linked_list_append(&orderProducts, Makeover);
     RecentOrder = make_order("1234", from_iso8601_utc("2018-09-01T00:00Z"),
                              FlagshipStore, orderProducts);
+    destroy_linked_list(orderProducts);
 }
