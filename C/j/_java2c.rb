@@ -50,6 +50,7 @@ def convert_line(line)
     gsub(/public static /, '').
     gsub(/private static /, 'static ').
     gsub(/new (\w+)\(/, 'make\\1(').
+    gsub(/(#{fieldName})\.(#{fieldName})\(/, '\\1\\2(').
 
     # map single statements
     gsub(/throw new UnsupportedOperationException\(("[^"]+")\);/, 'printf("Unsupported Operation %s\\n", \\1); exit(1);').
