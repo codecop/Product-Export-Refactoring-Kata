@@ -55,7 +55,7 @@ void sb_append_double(struct StringBuilder* this, double d)
 {
     size_t length = 24;
     sb_ensure_size(this, this->position + length);
-    int written = sprintf(this->buffer + this->position, "%03.2f", d);
+    int written = sprintf(this->buffer + this->position, "%f", d);
     this->position += written;
 }
 

@@ -57,6 +57,7 @@ const char* export_full(const struct LinkedList* orders)
 }
 
 static const char* iso_date(time_t);
+static const char* format(double);
 
 const char* export_tax_details(struct LinkedList* orders)
 {
@@ -95,15 +96,22 @@ const char* export_tax_details(struct LinkedList* orders)
         else {
             tax += 20;
         }
-        sb_append_double(xml, tax);
+        sb_append(xml, format(tax));
         sb_append(xml, "</orderTax>");
         sb_append(xml, "</order>");
     }
     double totalTax = calculate_added_tax(orders);
-    sb_append_double(xml, totalTax);
+    sb_append(xml, format(totalTax));
     sb_append(xml, "\n");
     sb_append(xml, "</orderTax>");
     return sb_string(xml);
+}
+
+static const char* format(double d)
+{
+    char* s = (char*)malloc(sizeof(char[24 + 1]));
+    sprintf(s, "%03.2f", d);
+    return s;
 }
 
 const char* ExportStore(struct Store* store)
