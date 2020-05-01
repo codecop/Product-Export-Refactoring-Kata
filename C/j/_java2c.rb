@@ -25,24 +25,37 @@ def convert_line(line)
 
     # map fields
     gsub(/(?:private|protected) (?:final )?(#{type}) (#{fieldName})/, "\\1 \\2").
+
     # map class struct
     sub(/public class (#{typeName}) implements (#{typeName}) \{/, "struct \\1 {\n\t\\2 base;").
     sub(/public class (#{typeName}) extends (#{typeName}) \{/, "struct \\1 {\n\t\\2 base;").
     sub(/public class (#{typeName}) \{/, "struct \\1 {").
+    sub(/public class (#{typeName})\s$/, "struct \\1").
     gsub(/^\}\n/, ''). # remove end of class
-    # map declarations
+
+    # map constructor
     sub(/public #{@@classname}\(([^)]*)\) \{/, # constructor declaration
       "};\n\n" + # end of struct
       "    #{struct}* make#{@@classname}(\\1) {\n" +
       "        #{struct} *this = (#{struct} *)malloc(sizeof(#{struct}));").
-    # add return this; - found by compile error
+    # ... add return this; - found by compile error
+
     # add this
     gsub(/public (#{type}) (#{fieldName})\(([^)]*)\) \{/, "\\1 #{@@classname}\\2(#{struct} *this, \\3) {"). # this
     gsub(/, \)/, ')'). # fix arguments introduced by this
     gsub(/this\./, 'this->'). # fix .
+
+    # map methods
     gsub(/public static /, '').
+    gsub(/private static /, 'static ').
+    gsub(/new (\w+)\(/, 'make\\1(').
+
     # map single statements
     gsub(/throw new UnsupportedOperationException\(("[^"]+")\);/, 'printf("Unsupported Operation %s\\n", \\1); exit(1);').
+
+    # map comments
+    gsub(/\/\*\*/, '/*').
+    gsub(/\/\/(.*)$/, '/*\\1 */').
 
     # map types
     gsub(/String /, 'const char* ').
@@ -59,7 +72,7 @@ def convert_line(line)
   # method name in expression after operator
   # method name in expression with cast
 
-  if line =~ badMethodUse
+  while line =~ badMethodUse
     name = $1
     new_name = to_snake(name)
     line = line.gsub(/#{name}\(/, new_name + '(')
@@ -123,7 +136,7 @@ def to_c_file_name(java_name)
   java_name
 end
 
-Dir['TaxCalculator.java'].each do |java_file|
+Dir['SampleModelObjects.java'].each do |java_file|
   java_lines = IO.readlines(java_file)
   c_lines = convert_source(java_lines)
   c_file = to_c_file_name(java_file[/^[^.]+/]) + '.c'
