@@ -8,5 +8,5 @@ struct LinkedList {
 
 #endif
 
-extern struct LinkedList* make_linked_list();
+extern struct LinkedList* make_linked_list(void);
 extern void linked_list_append(struct LinkedList** head, const void* data);

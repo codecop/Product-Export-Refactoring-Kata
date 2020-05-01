@@ -13,7 +13,7 @@ struct LinkedMap {
 
 #endif
 
-extern struct LinkedMap* make_linked_map();
+extern struct LinkedMap* make_linked_map(void);
 extern void linked_map_put(struct LinkedMap** head, const char* name, const void* data);
 extern const void* linked_map_remove(struct LinkedMap** head, const char* name);
 extern bool linked_map_contains(const struct LinkedMap* head, const char* name);

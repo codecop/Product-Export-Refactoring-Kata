@@ -3,7 +3,7 @@
 
 #include "LinkedMap.h"
 
-struct LinkedMap* make_linked_map()
+struct LinkedMap* make_linked_map(void)
 {
     return NULL;
 }

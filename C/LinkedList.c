@@ -2,7 +2,7 @@
 
 #include "LinkedList.h"
 
-struct LinkedList* make_linked_list()
+struct LinkedList* make_linked_list(void)
 {
     return NULL;
 }
