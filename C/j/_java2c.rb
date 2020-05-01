@@ -46,6 +46,7 @@ def convert_line(line)
     gsub(/this\./, 'this->'). # fix .
 
     # map methods
+    gsub(/throws \w+/, '').
     gsub(/public static /, '').
     gsub(/private static /, 'static ').
     gsub(/new (\w+)\(/, 'make\\1(').
@@ -136,7 +137,7 @@ def to_c_file_name(java_name)
   java_name
 end
 
-Dir['SampleModelObjects.java'].each do |java_file|
+Dir['XMLExporter.java'].each do |java_file|
   java_lines = IO.readlines(java_file)
   c_lines = convert_source(java_lines)
   c_file = to_c_file_name(java_file[/^[^.]+/]) + '.c'
