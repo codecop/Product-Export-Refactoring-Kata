@@ -7,9 +7,11 @@
 #include "LinkedList.h"
 #include "Price.h"
 #include "SampleModelObjects.h"
+#include "StringBuilder.h"
 #include "TaxCalculator.h"
 #include "Util.h"
 #include <stdlib.h>
+#include <string.h>
 
 static void test_util_from_iso8601_utc(void** state)
 {
@@ -79,6 +81,35 @@ static void test_calculate_added_tax(void** state)
     destroy_linked_list(orders);
 }
 
+static void test_string_builder(void** state)
+{
+    (void)state; /* unused */
+
+    struct StringBuilder* sb = make_sb();
+    assert_string_equal("", sb_string(sb));
+
+    /* append */
+    sb = make_sb();
+    sb_append(sb, "foo");
+    sb_append_long(sb, 3);
+    sb_append(sb, " ");
+    sb_append_double(sb, 1.1);
+    assert_string_equal("foo3 1.100000", sb_string(sb));
+
+    /* grow */
+    sb = make_sb();
+    sb_append(sb, "1234567890ABCDEF");
+    sb_append(sb, "1234567890abcdef");
+    sb_append(sb, "1234567890ABCDEF");
+    sb_append(sb, "1234567890ABCDEF");
+    assert_string_equal(
+        "1234567890ABCDEF"
+        "1234567890abcdef"
+        "1234567890ABCDEF"
+        "1234567890ABCDEF",
+        sb_string(sb));
+}
+
 int main(void)
 {
     const struct CMUnitTest test_suite[] = {
@@ -87,6 +118,7 @@ int main(void)
         cmocka_unit_test(test_linked_list_append),    /* */
         cmocka_unit_test(test_sample_product),        /* */
         cmocka_unit_test(test_calculate_added_tax),   /* */
+        cmocka_unit_test(test_string_builder),        /* */
     };
 
     return cmocka_run_group_tests(test_suite, NULL, NULL);

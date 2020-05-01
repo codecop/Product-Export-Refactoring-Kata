@@ -12,10 +12,10 @@ struct StringBuilder {
 
 struct StringBuilder* make_sb(void)
 {
-    struct StringBuilder* this =
-        (struct StringBuilder*)malloc(sizeof(struct StringBuilder));
+    struct StringBuilder* this = (struct StringBuilder*)malloc(sizeof(struct StringBuilder));
     this->bufferLength = INITIAL_BUFFER;
     this->buffer = malloc(this->bufferLength);
+    this->buffer[0] = '\0';
     this->position = 0;
     return this;
 }
