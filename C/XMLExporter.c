@@ -11,6 +11,7 @@
 #include <time.h>
 
 static const char* stylist_for(const struct Product*);
+static const char* format(double);
 
 const char* xml_export_full(const struct LinkedList* orders)
 {
@@ -47,7 +48,7 @@ const char* xml_export_full(const struct LinkedList* orders)
             sb_append(xml, " currency='");
             sb_append(xml, get_price_currency(get_product_price(product)));
             sb_append(xml, "'>");
-            sb_append_double(xml, get_price_amount(get_product_price(product)));
+            sb_append_temp(xml, format(get_price_amount(get_product_price(product))));
             sb_append(xml, "</price>");
             sb_append(xml, get_product_name(product));
             sb_append(xml, "</product>");
@@ -59,8 +60,6 @@ const char* xml_export_full(const struct LinkedList* orders)
     sb_append(xml, "</orders>");
     return sb_string(xml);
 }
-
-static const char* format(double);
 
 const char* xml_export_tax_details(struct LinkedList* orders)
 {
@@ -148,7 +147,7 @@ const char* xml_export_store(struct Store* store)
         sb_append(xml, " currency='");
         sb_append(xml, get_price_currency(get_product_price(product)));
         sb_append(xml, "'>");
-        sb_append_double(xml, get_price_amount(get_product_price(product)));
+        sb_append_temp(xml, format(get_price_amount(get_product_price(product))));
         sb_append(xml, "</price>");
         sb_append(xml, get_product_name(product));
         sb_append(xml, "</product>");
@@ -176,7 +175,7 @@ const char* xml_export_history(struct LinkedList* orders)
         sb_append_temp(xml, to_iso_date(get_order_date(order)));
         sb_append(xml, "'");
         sb_append(xml, " totalDollars='");
-        sb_append_double(xml, order_total_dollars(order));
+        sb_append_temp(xml, format(order_total_dollars(order)));
         sb_append(xml, "'>");
         const struct LinkedList* products = get_order_products(order);
         for (const struct LinkedList* node = products; node; node = node->next) {
