@@ -71,7 +71,7 @@ const char* export_tax_details(struct LinkedList* orders)
         const struct Order* order = (const struct Order*)node->data;
         sb_append(xml, "<order");
         sb_append(xml, " date='");
-        sb_append(xml, to_iso_date(get_order_date(order)));
+        sb_append_temp(xml, to_iso_date(get_order_date(order)));
         sb_append(xml, "'");
         sb_append(xml, ">");
         double tax = 0.0;
@@ -97,13 +97,13 @@ const char* export_tax_details(struct LinkedList* orders)
             tax += 10;
         else
             tax += 20;
-        sb_append(xml, format(tax));
+        sb_append_temp(xml, format(tax));
         sb_append(xml, "</orderTax>");
         sb_append(xml, "</order>");
     }
 
     double totalTax = calculate_added_tax(orders);
-    sb_append(xml, format(totalTax));
+    sb_append_temp(xml, format(totalTax));
     sb_append(xml, "\n");
     sb_append(xml, "</orderTax>");
     return sb_string(xml);
@@ -166,14 +166,14 @@ const char* export_history(struct LinkedList* orders)
     sb_append(xml, "<orderHistory");
     sb_append(xml, " createdAt='");
     time_t now = time(NULL);
-    sb_append(xml, to_iso_date(now));
+    sb_append_temp(xml, to_iso_date(now));
     sb_append(xml, "'");
     sb_append(xml, ">");
     for (const struct LinkedList* node = orders; node; node = node->next) {
         const struct Order* order = (const struct Order*)node->data;
         sb_append(xml, "<order");
         sb_append(xml, " date='");
-        sb_append(xml, to_iso_date(get_order_date(order)));
+        sb_append_temp(xml, to_iso_date(get_order_date(order)));
         sb_append(xml, "'");
         sb_append(xml, " totalDollars='");
         sb_append_double(xml, order_total_dollars(order));
