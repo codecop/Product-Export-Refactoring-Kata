@@ -43,8 +43,6 @@ void store_add_store_event(struct Store* this, const struct Product* storeEvent)
     linked_map_put(&this->itemsInStock, storeEventName, storeEvent);
 }
 
-/* skipped removeStockedItems */
-
 bool store_has_item(const struct Store* this, const struct Product* item)
 {
     const char* productName = get_product_name(item);

@@ -5,7 +5,7 @@
 #include "XMLExporter.h"
 #include <cmocka.h>
 
-static void test_foo(void** state)
+static void test_something(void** state)
 {
     (void)state; /* unused */
 
@@ -15,7 +15,7 @@ static void test_foo(void** state)
 int main(void)
 {
     const struct CMUnitTest test_suite[] = {
-        cmocka_unit_test(test_foo), /* */
+        cmocka_unit_test(test_something), /* */
     };
 
     return cmocka_run_group_tests(test_suite, NULL, NULL);

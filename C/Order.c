@@ -37,11 +37,6 @@ double order_total_dollars(const struct Order* this)
     return dollars;
 }
 
-void add_order_product(struct Order* this, const struct Product* product)
-{
-    linked_list_append(&this->products, (void*)product);
-}
-
 const char* order_to_string(const struct Order* this)
 {
     char* s = (char*)malloc(sizeof(char[7 + 20 + 1]));
@@ -76,6 +71,11 @@ void add_order_products(struct Order* this, const struct LinkedList* products)
 {
     for (const struct LinkedList* node = products; node; node = node->next) {
         const struct Product* product = (const struct Product*)node->data;
-        add_order_product(this, product);
+        linked_list_append(&this->products, (void*)product);
     }
+}
+
+struct Store* get_order_store(const struct Order* this)
+{
+    return this->store;
 }

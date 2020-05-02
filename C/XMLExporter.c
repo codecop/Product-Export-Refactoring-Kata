@@ -35,11 +35,13 @@ const char* export_full(const struct LinkedList* orders)
                 sb_append(xml, stylist_for(product));
                 sb_append(xml, "'");
             }
+
             if (get_product_weight(product) > 0) {
                 sb_append(xml, " weight='");
                 sb_append_long(xml, get_product_weight(product));
                 sb_append(xml, "'");
             }
+
             sb_append(xml, ">");
             sb_append(xml, "<price");
             sb_append(xml, " currency='");
@@ -50,13 +52,14 @@ const char* export_full(const struct LinkedList* orders)
             sb_append(xml, get_product_name(product));
             sb_append(xml, "</product>");
         }
+
         sb_append(xml, "</order>");
     }
+
     sb_append(xml, "</orders>");
     return sb_string(xml);
 }
 
-static const char* iso_date(time_t);
 static const char* format(double);
 
 const char* export_tax_details(struct LinkedList* orders)
@@ -68,7 +71,7 @@ const char* export_tax_details(struct LinkedList* orders)
         const struct Order* order = (const struct Order*)node->data;
         sb_append(xml, "<order");
         sb_append(xml, " date='");
-        sb_append(xml, iso_date(get_order_date(order)));
+        sb_append(xml, to_iso_date(get_order_date(order)));
         sb_append(xml, "'");
         sb_append(xml, ">");
         double tax = 0.0;
@@ -82,24 +85,23 @@ const char* export_tax_details(struct LinkedList* orders)
             sb_append(xml, ">");
             sb_append(xml, get_product_name(product));
             sb_append(xml, "</product>");
-            if (is_product_event(product)) {
+            if (is_product_event(product))
                 tax += get_price_amount_in_currency(get_product_price(product), "USD") * 0.25;
-            }
-            else {
+            else
                 tax += get_price_amount_in_currency(get_product_price(product), "USD") * 0.175;
-            }
+
         }
+
         sb_append(xml, "<orderTax currency='USD'>");
-        if (get_order_date(order) < from_iso8601_utc("2018-01-01T00:00Z")) {
+        if (get_order_date(order) < from_iso_date("2018-01-01T00:00Z"))
             tax += 10;
-        }
-        else {
+        else
             tax += 20;
-        }
         sb_append(xml, format(tax));
         sb_append(xml, "</orderTax>");
         sb_append(xml, "</order>");
     }
+
     double totalTax = calculate_added_tax(orders);
     sb_append(xml, format(totalTax));
     sb_append(xml, "\n");
@@ -114,7 +116,7 @@ static const char* format(double d)
     return s;
 }
 
-const char* ExportStore(struct Store* store)
+const char* export_store(struct Store* store)
 {
     struct StringBuilder* xml = make_sb();
     sb_append(xml, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
@@ -140,6 +142,7 @@ const char* ExportStore(struct Store* store)
             sb_append_long(xml, get_product_weight(product));
             sb_append(xml, "'");
         }
+
         sb_append(xml, ">");
         sb_append(xml, "<price");
         sb_append(xml, " currency='");
@@ -150,7 +153,9 @@ const char* ExportStore(struct Store* store)
         sb_append(xml, get_product_name(product));
         sb_append(xml, "</product>");
     }
+
     sb_append(xml, "</store>");
+
     return sb_string(xml);
 }
 
@@ -161,14 +166,14 @@ const char* export_history(struct LinkedList* orders)
     sb_append(xml, "<orderHistory");
     sb_append(xml, " createdAt='");
     time_t now = time(NULL);
-    sb_append(xml, iso_date(now));
+    sb_append(xml, to_iso_date(now));
     sb_append(xml, "'");
     sb_append(xml, ">");
     for (const struct LinkedList* node = orders; node; node = node->next) {
         const struct Order* order = (const struct Order*)node->data;
         sb_append(xml, "<order");
         sb_append(xml, " date='");
-        sb_append(xml, iso_date(get_order_date(order)));
+        sb_append(xml, to_iso_date(get_order_date(order)));
         sb_append(xml, "'");
         sb_append(xml, " totalDollars='");
         sb_append_double(xml, order_total_dollars(order));
@@ -184,31 +189,17 @@ const char* export_history(struct LinkedList* orders)
             sb_append(xml, get_product_name(product));
             sb_append(xml, "</product>");
         }
+
         sb_append(xml, "</order>");
     }
+
     sb_append(xml, "</orderHistory>");
     return sb_string(xml);
-}
-
-static const char* iso_date(const time_t date)
-{
-    struct tm* utc = gmtime(&date);
-    /* compensate expected ranges */
-    utc->tm_year = utc->tm_year + 1900;
-    utc->tm_mon = utc->tm_mon + 1;
-
-    char* s = (char*)malloc(sizeof(char[17 + 1]));
-    sprintf(s, "%04d-%02d-%02dT%02d:%02dZ", /* */
-               utc->tm_year, utc->tm_mon, utc->tm_mday, utc->tm_hour, utc->tm_min);
-	free(utc);
-    return s;
 }
 
 static const char* stylist_for(const struct Product* product)
 {
     (void)product; /* unused */
 
-    return "Celeste Pulchritudo";
-    /* in future we will look up the name of */
-    /* the stylist from the database */
+    return "Celeste Pulchritudo"; /* in future we will look up the name of the stylist from the database */
 }

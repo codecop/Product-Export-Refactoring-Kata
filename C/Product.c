@@ -7,12 +7,12 @@
 struct Product {
     const char* name;
     const char* id;
-    long weight;
+    int weight;
     const struct Price* price;
     void* location; /* struct Store* */
 };
 
-struct Product* make_product(const char* name, const char* id, long weight, const struct Price* price)
+struct Product* make_product(const char* name, const char* id, int weight, const struct Price* price)
 {
     struct Product* this = (struct Product*)malloc(sizeof(struct Product));
     this->name = name;
@@ -57,7 +57,7 @@ const char* product_to_string(const struct Product* this)
     }
 }
 
-long get_product_weight(const struct Product* this)
+int get_product_weight(const struct Product* this)
 {
     return this->weight;
 }

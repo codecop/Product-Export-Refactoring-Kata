@@ -22,8 +22,8 @@ struct Product* make_store_event(const char* name,
     return this;
 }
 
-void store_event_set_location(struct Product* this, struct Store* locationStore)
+void store_event_set_location(struct Product* this, struct Store* store)
 {
-    product_set_location(this, locationStore);
-    store_add_store_event(locationStore, this);
+    product_set_location(this, store);
+    store_add_store_event(store, this);
 }

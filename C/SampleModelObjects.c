@@ -52,7 +52,7 @@ void make_sample_model_objects(void)
 
     struct LinkedList* orderProducts = make_linked_list();
     linked_list_append(&orderProducts, Makeover);
-    RecentOrder = make_order("1234", from_iso8601_utc("2018-09-01T00:00Z"),
+    RecentOrder = make_order("1234", from_iso_date("2018-09-01T00:00Z"),
                              FlagshipStore, orderProducts);
     destroy_linked_list(orderProducts);
 }

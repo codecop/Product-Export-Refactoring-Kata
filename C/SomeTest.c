@@ -14,11 +14,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-static void test_util_from_iso8601_utc(void** state)
+static void test_util_from_iso_date(void** state)
 {
     (void)state; /* unused */
 
-    assert_int_equal(1514764800L, from_iso8601_utc("2018-01-01T00:00Z"));
+    assert_int_equal(1514764800L, from_iso_date("2018-01-01T00:00Z"));
 }
 
 static void test_price_functions(void** state)
@@ -114,7 +114,7 @@ static void test_string_builder(void** state)
 int main(void)
 {
     const struct CMUnitTest test_suite[] = {
-        cmocka_unit_test(test_util_from_iso8601_utc), /* */
+        cmocka_unit_test(test_util_from_iso_date), /* */
         cmocka_unit_test(test_price_functions),       /* */
         cmocka_unit_test(test_linked_list_append),    /* */
         cmocka_unit_test(test_sample_product),        /* */
