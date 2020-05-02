@@ -5,6 +5,7 @@
 #include <cmocka.h>
 
 #include "Approvals.c"
+#include "Approvals.h"
 
 static void test_approvals_name(void** state)
 {
@@ -14,7 +15,7 @@ static void test_approvals_name(void** state)
                         approvals_file_name_for(__FILE__, "foo", true, "txt"));
 }
 
-static void test_save_load(void** state)
+static void test_approvals_save_load(void** state)
 {
     (void)state; /* unused */
 
@@ -25,19 +26,29 @@ static void test_save_load(void** state)
     approvals_delete("foo");
 }
 
-static void test_approval(void** state)
+static void test_approvals_verify(void** state)
 {
     (void)state; /* unused */
 
-    approvals_verify("abc123", __FILE__, "test_approval", "txt");
+    const char* approved =
+        approvals_verify("abc123", __FILE__, "test_approval", "txt");
+    assert_string_equal(approved, "abc123");
+}
+
+static void test_verify(void** state)
+{
+    (void)state; /* unused */
+
+    verify_xml("<nope />", "test_verify");
 }
 
 int main(void)
 {
     const struct CMUnitTest test_suite[] = {
-        cmocka_unit_test(test_approvals_name), /* */
-        cmocka_unit_test(test_save_load),      /* */
-        cmocka_unit_test(test_approval),       /* */
+        cmocka_unit_test(test_approvals_name),      /* */
+        cmocka_unit_test(test_approvals_save_load), /* */
+        cmocka_unit_test(test_approvals_verify),    /* */
+        cmocka_unit_test(test_verify),              /* */
     };
 
     return cmocka_run_group_tests(test_suite, NULL, NULL);

@@ -1,15 +1,10 @@
-#include <setjmp.h> /* for mocka */
-#include <stdarg.h> /* for mocka */
-#include <stddef.h> /* for mocka */
-
-#include <cmocka.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #define READ_BUFFER 1000
-static char __readBuffer[READ_BUFFER];
+static char readBuffer[READ_BUFFER];
 
 static const char* approvals_file_name_for(const char* fullFileName,
                                            const char* testName,
@@ -61,18 +56,18 @@ static const char* approvals_file_name_for(const char* fullFileName,
 
 static const const char* approvals_load(const char* filename)
 {
-    memset(__readBuffer, 0, READ_BUFFER);
+    memset(readBuffer, 0, READ_BUFFER);
     FILE* file = fopen(filename, "r");
     if (file == NULL) {
         fprintf(stderr, "Could not open file %s\n", filename);
         return "";
     }
-    fread(__readBuffer, sizeof(char), READ_BUFFER, file);
+    fread(readBuffer, sizeof(char), READ_BUFFER, file);
     int errorClose = fclose(file);
     if (errorClose) {
         fprintf(stderr, "Could not close %s, error %d\n", filename, errorClose);
     }
-    return __readBuffer;
+    return readBuffer;
 }
 
 static void approvals_save(const char* filename, const char* data)
@@ -105,10 +100,10 @@ static void approvals_delete(const char* filename)
     }
 }
 
-void approvals_verify(const char* received,
-                      const char* fullFileName,
-                      const char* testName,
-                      const char* extensionNoDot)
+const char* approvals_verify(const char* received,
+                             const char* fullFileName,
+                             const char* testName,
+                             const char* extensionNoDot)
 {
     const char* receivedName =
         approvals_file_name_for(fullFileName, testName, false, extensionNoDot);
@@ -122,19 +117,9 @@ void approvals_verify(const char* received,
         /* OK */
         approvals_delete(receivedName);
     }
-    else {
-        assert_string_equal(approved, received);
-    }
+
+    free((void*)receivedName);
+    free((void*)approvedName);
+
+    return approved;
 }
-
-#define verify_xml(xml, file_name)                               \
-    if (strcmp(get_approved(__FILE__(file_name)), (xml)) != 0) { \
-        save("foo.xml", (xml));                                  \
-    }                                                            \
-    assert_string_equal(get_approved(__FILE__(file_name)), xml);
-
-/*
- * remove file before run
- * add received and approved file names
- *
- */
