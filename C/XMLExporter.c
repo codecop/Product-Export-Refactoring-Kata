@@ -12,7 +12,7 @@
 
 static const char* stylist_for(const struct Product*);
 
-const char* export_full(const struct LinkedList* orders)
+const char* xml_export_full(const struct LinkedList* orders)
 {
     struct StringBuilder* xml = make_sb();
     sb_append(xml, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
@@ -62,7 +62,7 @@ const char* export_full(const struct LinkedList* orders)
 
 static const char* format(double);
 
-const char* export_tax_details(struct LinkedList* orders)
+const char* xml_export_tax_details(struct LinkedList* orders)
 {
     struct StringBuilder* xml = make_sb();
     sb_append(xml, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
@@ -116,7 +116,7 @@ static const char* format(double d)
     return s;
 }
 
-const char* export_store(struct Store* store)
+const char* xml_export_store(struct Store* store)
 {
     struct StringBuilder* xml = make_sb();
     sb_append(xml, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
@@ -159,7 +159,7 @@ const char* export_store(struct Store* store)
     return sb_string(xml);
 }
 
-const char* export_history(struct LinkedList* orders)
+const char* xml_export_history(struct LinkedList* orders)
 {
     struct StringBuilder* xml = make_sb();
     sb_append(xml, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
