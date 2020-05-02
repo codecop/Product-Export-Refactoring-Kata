@@ -2,7 +2,7 @@
 #include <stdarg.h> /* used by mocka */
 #include <stddef.h> /* used by mocka */
 
-#include "Approvals.c"
+#include "Approvals.h"
 #include "LinkedList.h"
 #include "SampleModelObjects2.h"
 #include "XMLExporter.h"
@@ -26,7 +26,7 @@ static void test_export_full(void** state)
 
     const char* xml = xml_export_full(orders);
 
-    verify_xml(xml, "XMLExporterTest.exportFull.approved.xml");
+    verify_xml(xml, "exportFull");
 }
 
 static void test_export_tax_details(void** state)
@@ -35,7 +35,7 @@ static void test_export_tax_details(void** state)
 
     const char* xml = xml_export_tax_details(orders);
 
-    verify_xml(xml, "XMLExporterTest.exportTaxDetails.approved.xml");
+    verify_xml(xml, "exportTaxDetails");
 }
 
 static void test_export_store(void** state)
@@ -45,7 +45,7 @@ static void test_export_store(void** state)
 
     const char* xml = xml_export_store(store);
 
-    verify_xml(xml, "XMLExporterTest.exportStore.approved.xml");
+    verify_xml(xml, "exportStore");
 }
 
 static void test_export_history(void** state)
@@ -58,7 +58,7 @@ static void test_export_history(void** state)
     const char* regex = "createdAt='[^']+'";
     xml = xmlreplace_first(regex, "createdAt='2018-09-20T00:00Z'");
     */
-    verify_xml(xml, "XMLExporterTest.exportHistory.approved.xml");
+    verify_xml(xml, "exportHistory");
 }
 
 int main(void)
