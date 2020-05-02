@@ -4,3 +4,5 @@
 30.04.2020  2.5h	remove Polymorphy, finish StoreEvent. Util. TaxCalculator.
 01.05.2020  1h	sample objects, sample test
             1.5h	XMLExporter with StringBuilder
+02.05.2020  2.0h	Abgleich mit C# und Java, 1st Approval test
+
