@@ -2,13 +2,11 @@
 #include <stdarg.h> /* used by mocka */
 #include <stddef.h> /* used by mocka */
 
+#include "Approvals.c"
 #include "LinkedList.h"
 #include "SampleModelObjects2.h"
 #include "XMLExporter.h"
 #include <cmocka.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
 
 struct LinkedList* orders;
 
@@ -21,35 +19,6 @@ static int setup_sample_model_objects(void** state)
     linked_list_append(&orders, OldOrder);
     return 0;
 }
-
-#define READ_BUFFER 1000
-static char __readBuffer[READ_BUFFER];
-
-static const char* get_approved(const char* filename)
-{
-    memset(__readBuffer, 0, READ_BUFFER);
-    FILE* file;
-    file = fopen(filename, "r");
-    fread(__readBuffer, sizeof(char), READ_BUFFER, file);
-    fclose(file);
-    return __readBuffer;
-}
-
-static void save(const char* filename, const char* data)
-{
-    printf("saving");
-    FILE* file;
-    file = fopen(filename, "w");
-    fwrite(data, sizeof(char), strlen(data), file);
-    fflush(file);
-    fclose(file);
-}
-
-#define verify_xml(xml, file_name) \
-    if (strcmp(get_approved((file_name)), (xml)) != 0) { \
-        save("foo.xml", (xml)); \
-    } \
-    assert_string_equal(get_approved((file_name)), xml);
 
 static void test_export_full(void** state)
 {
