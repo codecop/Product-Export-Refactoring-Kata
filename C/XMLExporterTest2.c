@@ -64,8 +64,8 @@ static void test_export_history(void** state)
 int main(void)
 {
     const struct CMUnitTest test_suite[] = {
-        cmocka_unit_test(test_export_full), /* */
-        // cmocka_unit_test(test_export_tax_details), /* */
+        cmocka_unit_test(test_export_full),        /* */
+        cmocka_unit_test(test_export_tax_details), /* */
         cmocka_unit_test(test_export_store),       /* */
         // cmocka_unit_test(test_export_history),     /* */
     };
