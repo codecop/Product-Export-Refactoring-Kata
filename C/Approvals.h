@@ -1,7 +1,7 @@
 extern const char* approvals_verify(const char* received,
-                                    const char* fullFileName,
-                                    const char* testName,
-                                    const char* extensionNoDot);
+                                    const char* full_file_name,
+                                    const char* test_name,
+                                    const char* extension_no_dot);
 
 #define verify_xml(xml, testName)                                                \
     const char* __approved = approvals_verify((xml), __FILE__, testName, "xml"); \

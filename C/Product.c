@@ -72,7 +72,7 @@ bool is_product_event(const struct Product* this)
     return this->location != NULL;
 }
 
-void product_set_location(struct Product* this, void* locationStore)
+void product_set_location(struct Product* this, void* location_store)
 {
-    this->location = locationStore;
+    this->location = location_store;
 }

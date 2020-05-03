@@ -107,8 +107,8 @@ const char* xml_export_tax_details(struct LinkedList* orders)
         sb_append(xml, "</order>");
     }
 
-    double totalTax = calculate_added_tax(orders);
-    const char* formatted_total_tax = make_format(totalTax);
+    double total_tax = calculate_added_tax(orders);
+    const char* formatted_total_tax = make_format(total_tax);
     sb_append(xml, formatted_total_tax);
     free((void*)formatted_total_tax);
     sb_append(xml, "\n");

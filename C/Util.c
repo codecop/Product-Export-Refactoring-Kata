@@ -19,9 +19,9 @@ time_t from_iso_date(const char* datetime)
     t.tm_yday = 0;
     t.tm_isdst = 0;
 
-    time_t localTime = mktime(&t);
-    time_t utcTime = localTime - timezone;
-    return utcTime;
+    time_t local_time = mktime(&t);
+    time_t utc_time = local_time - timezone;
+    return utc_time;
 }
 
 const char* to_iso_date(const time_t date)

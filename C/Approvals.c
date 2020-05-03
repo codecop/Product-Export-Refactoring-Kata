@@ -4,43 +4,43 @@
 #include <string.h>
 
 #define READ_BUFFER 1000
-static char readBuffer[READ_BUFFER];
+static char read_buffer[READ_BUFFER];
 
-static const char* approvals_file_name_for(const char* fullFileName,
-                                           const char* testName,
-                                           bool isApproved,
-                                           const char* extensionNoDot)
+static const char* approvals_file_name_for(const char* full_file_name,
+                                           const char* test_name,
+                                           bool is_approved,
+                                           const char* extension_no_dot)
 {
-    const char* lastDot = strrchr(fullFileName, '.');
-    size_t lengthFileName = 0;
-    if (lastDot) {
-        lengthFileName = lastDot - fullFileName;
+    const char* last_dot = strrchr(full_file_name, '.');
+    size_t length_file_name = 0;
+    if (last_dot) {
+        length_file_name = last_dot - full_file_name;
     }
     else {
-        lengthFileName = strlen(fullFileName);
+        length_file_name = strlen(full_file_name);
     }
 
     size_t length = 0;
-    length += lengthFileName;
+    length += length_file_name;
     length += 1; /* . */
-    length += strlen(testName);
+    length += strlen(test_name);
     length += 1; /* . */
     length += 8; /* "approved" or "received" */
     length += 1; /* . */
-    length += strlen(extensionNoDot);
+    length += strlen(extension_no_dot);
     length += 1; /* NULL */
     char* s = (char*)malloc(length);
 
     char* offset = s;
-    strcpy(offset, fullFileName);
-    offset += lengthFileName;
+    strcpy(offset, full_file_name);
+    offset += length_file_name;
     strcpy(offset, ".");
     offset += 1;
-    strcpy(offset, testName);
-    offset += strlen(testName);
+    strcpy(offset, test_name);
+    offset += strlen(test_name);
     strcpy(offset, ".");
     offset += 1;
-    if (isApproved) {
+    if (is_approved) {
         strcpy(offset, "approved");
     }
     else {
@@ -49,25 +49,25 @@ static const char* approvals_file_name_for(const char* fullFileName,
     offset += 8;
     strcpy(offset, ".");
     offset += 1;
-    strcpy(offset, extensionNoDot);
+    strcpy(offset, extension_no_dot);
 
     return s;
 }
 
 static const const char* approvals_load(const char* filename)
 {
-    memset(readBuffer, 0, READ_BUFFER);
+    memset(read_buffer, 0, READ_BUFFER);
     FILE* file = fopen(filename, "r");
     if (file == NULL) {
         fprintf(stderr, "Could not open file %s\n", filename);
         return "";
     }
-    fread(readBuffer, sizeof(char), READ_BUFFER, file);
-    int errorClose = fclose(file);
-    if (errorClose) {
-        fprintf(stderr, "Could not close %s, error %d\n", filename, errorClose);
+    fread(read_buffer, sizeof(char), READ_BUFFER, file);
+    int error_close = fclose(file);
+    if (error_close) {
+        fprintf(stderr, "Could not close %s, error %d\n", filename, error_close);
     }
-    return readBuffer;
+    return read_buffer;
 }
 
 static void approvals_save(const char* filename, const char* data)
@@ -82,44 +82,44 @@ static void approvals_save(const char* filename, const char* data)
         fprintf(stderr, "Could not write %s, %d instead %d bytes\n", filename,
                 strlen(data), written);
     }
-    int errorFlush = fflush(file);
-    if (errorFlush) {
-        fprintf(stderr, "Could not flush %s, error %d\n", filename, errorFlush);
+    int error_flush = fflush(file);
+    if (error_flush) {
+        fprintf(stderr, "Could not flush %s, error %d\n", filename, error_flush);
     }
-    int errorClose = fclose(file);
-    if (errorClose) {
-        fprintf(stderr, "Could not close %s, error %d\n", filename, errorClose);
+    int error_close = fclose(file);
+    if (error_close) {
+        fprintf(stderr, "Could not close %s, error %d\n", filename, error_close);
     }
 }
 
 static void approvals_delete(const char* filename)
 {
-    int errorRemove = remove(filename);
-    if (errorRemove) {
-        fprintf(stderr, "Could not delete %s, error %d\n", filename, errorRemove);
+    int error_remove = remove(filename);
+    if (error_remove) {
+        fprintf(stderr, "Could not delete %s, error %d\n", filename, error_remove);
     }
 }
 
 const char* approvals_verify(const char* received,
-                             const char* fullFileName,
-                             const char* testName,
-                             const char* extensionNoDot)
+                             const char* full_file_name,
+                             const char* test_name,
+                             const char* extension_no_dot)
 {
-    const char* receivedName =
-        approvals_file_name_for(fullFileName, testName, false, extensionNoDot);
-    approvals_save(receivedName, received);
+    const char* received_name =
+        approvals_file_name_for(full_file_name, test_name, false, extension_no_dot);
+    approvals_save(received_name, received);
 
-    const char* approvedName =
-        approvals_file_name_for(fullFileName, testName, true, extensionNoDot);
-    const char* approved = approvals_load(approvedName);
+    const char* approved_name =
+        approvals_file_name_for(full_file_name, test_name, true, extension_no_dot);
+    const char* approved = approvals_load(approved_name);
 
     if (strcmp(approved, received) == 0) {
         /* OK */
-        approvals_delete(receivedName);
+        approvals_delete(received_name);
     }
 
-    free((void*)receivedName);
-    free((void*)approvedName);
+    free((void*)received_name);
+    free((void*)approved_name);
 
     return approved;
 }

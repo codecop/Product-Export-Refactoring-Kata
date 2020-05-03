@@ -10,21 +10,21 @@ struct LinkedMap* make_linked_map(void)
 
 void linked_map_put(struct LinkedMap** head, const char* name, const void* data)
 {
-    struct LinkedMap *newNode, *temp;
+    struct LinkedMap *new_node, *temp;
 
     for (temp = *head; temp && temp->next; temp = temp->next)
         ;
 
-    newNode = malloc(sizeof(*newNode));
-    newNode->name = name;
-    newNode->data = data;
-    newNode->next = NULL;
+    new_node = malloc(sizeof(*new_node));
+    new_node->name = name;
+    new_node->data = data;
+    new_node->next = NULL;
 
     if (temp) {
-        temp->next = newNode;
+        temp->next = new_node;
     }
     else {
-        *head = newNode;
+        *head = new_node;
     }
 }
 

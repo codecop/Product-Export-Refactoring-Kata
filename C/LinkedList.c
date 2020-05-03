@@ -9,20 +9,20 @@ struct LinkedList* make_linked_list(void)
 
 void linked_list_append(struct LinkedList** head, const void* data)
 {
-    struct LinkedList *newNode, *temp;
+    struct LinkedList *new_node, *temp;
 
     for (temp = *head; temp && temp->next; temp = temp->next)
         ;
 
-    newNode = malloc(sizeof(*newNode));
-    newNode->data = data;
-    newNode->next = NULL;
+    new_node = malloc(sizeof(*new_node));
+    new_node->data = data;
+    new_node->next = NULL;
 
     if (temp) {
-        temp->next = newNode;
+        temp->next = new_node;
     }
     else {
-        *head = newNode;
+        *head = new_node;
     }
 }
 
@@ -30,8 +30,8 @@ void destroy_linked_list(struct LinkedList* head)
 {
     struct LinkedList* current = head;
     while (current) {
-        struct LinkedList* toFree = current;
+        struct LinkedList* to_free = current;
         current = current->next;
-        free(toFree);
+        free(to_free);
     }
 }

@@ -6,15 +6,15 @@
 
 struct StringBuilder {
     char* buffer;
-    size_t bufferLength;
+    size_t buffer_length;
     size_t position;
 };
 
 struct StringBuilder* make_sb(void)
 {
     struct StringBuilder* this = (struct StringBuilder*)malloc(sizeof(struct StringBuilder));
-    this->bufferLength = INITIAL_BUFFER;
-    this->buffer = malloc(this->bufferLength);
+    this->buffer_length = INITIAL_BUFFER;
+    this->buffer = malloc(this->buffer_length);
     this->buffer[0] = '\0';
     this->position = 0;
     return this;
@@ -22,17 +22,17 @@ struct StringBuilder* make_sb(void)
 
 static void sb_ensure_size(struct StringBuilder* this, size_t size)
 {
-    if (this->bufferLength > size) {
+    if (this->buffer_length > size) {
         return;
     }
 
-    char* oldBuffer = this->buffer;
-    while (this->bufferLength <= size) {
-        this->bufferLength *= 2;
+    char* old_buffer = this->buffer;
+    while (this->buffer_length <= size) {
+        this->buffer_length *= 2;
     }
-    this->buffer = malloc(this->bufferLength);
-    memcpy(this->buffer, oldBuffer, this->position + 1);
-    free(oldBuffer);
+    this->buffer = malloc(this->buffer_length);
+    memcpy(this->buffer, old_buffer, this->position + 1);
+    free(old_buffer);
 }
 
 void sb_append(struct StringBuilder* this, const char* s)

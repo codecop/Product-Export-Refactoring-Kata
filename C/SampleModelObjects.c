@@ -39,10 +39,10 @@ void make_sample_model_objects(void)
     CocoaButter =
         make_product("Cocoa Butter", "SKIN_CREAM01", 250, make_price(10.99, "USD"));
 
-    struct LinkedList* storeProducts = make_linked_list();
-    linked_list_append(&storeProducts, CherryBloom);
-    FlagshipStore = make_store("Nordstan", "4189", storeProducts);
-    destroy_linked_list(storeProducts);
+    struct LinkedList* store_products = make_linked_list();
+    linked_list_append(&store_products, CherryBloom);
+    FlagshipStore = make_store("Nordstan", "4189", store_products);
+    destroy_linked_list(store_products);
 
     /* Store events add themselves to the stocked items at their store */
     Masterclass = make_store_event("Eyeshadow Masterclass", "EVENT01",
@@ -50,9 +50,9 @@ void make_sample_model_objects(void)
     Makeover = make_store_event("Makeover", "EVENT02",
                                 FlagshipStore, make_price(149.99, "USD"));
 
-    struct LinkedList* orderProducts = make_linked_list();
-    linked_list_append(&orderProducts, Makeover);
+    struct LinkedList* order_products = make_linked_list();
+    linked_list_append(&order_products, Makeover);
     RecentOrder = make_order("1234", from_iso_date("2018-09-01T00:00Z"),
-                             FlagshipStore, orderProducts);
-    destroy_linked_list(orderProducts);
+                             FlagshipStore, order_products);
+    destroy_linked_list(order_products);
 }
