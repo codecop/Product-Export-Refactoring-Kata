@@ -5,4 +5,5 @@
 01.05.2020  1h	sample objects, sample test
             1.5h	XMLExporter with StringBuilder
 02.05.2020  2.0h	Abgleich mit C# und Java, 1st Approval test
-            1.0h    Minumal Approval framework
+            1.0h    Minimal Approval framework
+03.05.2020  1.0h    Approvals anpassen, laufen
