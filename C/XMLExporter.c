@@ -11,7 +11,7 @@
 #include <time.h>
 
 static const char* stylist_for(const struct Product*);
-static const char* format(double);
+static const char* make_format(double);
 
 const char* xml_export_full(const struct LinkedList* orders)
 {
@@ -48,7 +48,9 @@ const char* xml_export_full(const struct LinkedList* orders)
             sb_append(xml, " currency='");
             sb_append(xml, get_price_currency(get_product_price(product)));
             sb_append(xml, "'>");
-            sb_append_temp(xml, format(get_price_amount(get_product_price(product))));
+            const char* formatted = make_format(get_price_amount(get_product_price(product)));
+            sb_append(xml, formatted);
+            free((void*)formatted);
             sb_append(xml, "</price>");
             sb_append(xml, get_product_name(product));
             sb_append(xml, "</product>");
@@ -70,7 +72,9 @@ const char* xml_export_tax_details(struct LinkedList* orders)
         const struct Order* order = (const struct Order*)node->data;
         sb_append(xml, "<order");
         sb_append(xml, " date='");
-        sb_append_temp(xml, to_iso_date(get_order_date(order)));
+        const char* formatted = to_iso_date(get_order_date(order));
+        sb_append(xml, formatted);
+        free((void*)formatted);
         sb_append(xml, "'");
         sb_append(xml, ">");
         double tax = 0.0;
@@ -96,19 +100,23 @@ const char* xml_export_tax_details(struct LinkedList* orders)
             tax += 10;
         else
             tax += 20;
-        sb_append_temp(xml, format(tax));
+        const char* formatted_tax = make_format(tax);
+        sb_append(xml, formatted_tax);
+        free((void*)formatted_tax);
         sb_append(xml, "</orderTax>");
         sb_append(xml, "</order>");
     }
 
     double totalTax = calculate_added_tax(orders);
-    sb_append_temp(xml, format(totalTax));
+    const char* formatted_total_tax = make_format(totalTax);
+    sb_append(xml, formatted_total_tax);
+    free((void*)formatted_total_tax);
     sb_append(xml, "\n");
     sb_append(xml, "</orderTax>");
     return sb_string(xml);
 }
 
-static const char* format(double d)
+static const char* make_format(double d)
 {
     char* s = (char*)malloc(sizeof(char[24 + 1]));
     sprintf(s, "%03.2f", d);
@@ -147,7 +155,9 @@ const char* xml_export_store(struct Store* store)
         sb_append(xml, " currency='");
         sb_append(xml, get_price_currency(get_product_price(product)));
         sb_append(xml, "'>");
-        sb_append_temp(xml, format(get_price_amount(get_product_price(product))));
+        const char* formatted = make_format(get_price_amount(get_product_price(product)));
+        sb_append(xml, formatted);
+        free((void*)formatted);
         sb_append(xml, "</price>");
         sb_append(xml, get_product_name(product));
         sb_append(xml, "</product>");
@@ -165,17 +175,23 @@ const char* xml_export_history(struct LinkedList* orders)
     sb_append(xml, "<orderHistory");
     sb_append(xml, " createdAt='");
     time_t now = time(NULL);
-    sb_append_temp(xml, to_iso_date(now));
+    const char* formatted_now = to_iso_date(now);
+    sb_append(xml, formatted_now);
+    free((void*)formatted_now);
     sb_append(xml, "'");
     sb_append(xml, ">");
     for (const struct LinkedList* node = orders; node; node = node->next) {
         const struct Order* order = (const struct Order*)node->data;
         sb_append(xml, "<order");
         sb_append(xml, " date='");
-        sb_append_temp(xml, to_iso_date(get_order_date(order)));
+        const char* formatted_date = to_iso_date(get_order_date(order));
+        sb_append(xml, formatted_date);
+        free((void*)formatted_date);
         sb_append(xml, "'");
         sb_append(xml, " totalDollars='");
-        sb_append_temp(xml, format(order_total_dollars(order)));
+        const char* formatted_total = make_format(order_total_dollars(order));
+        sb_append(xml, formatted_total);
+        free((void*)formatted_total);
         sb_append(xml, "'>");
         const struct LinkedList* products = get_order_products(order);
         for (const struct LinkedList* node = products; node; node = node->next) {

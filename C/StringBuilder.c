@@ -43,12 +43,6 @@ void sb_append(struct StringBuilder* this, const char* s)
     this->position += length;
 }
 
-void sb_append_temp(struct StringBuilder* this, char* temp)
-{
-    sb_append(this, temp);
-    free(temp);
-}
-
 void sb_append_long(struct StringBuilder* this, long l)
 {
     size_t length = 10;
