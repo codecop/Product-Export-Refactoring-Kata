@@ -67,7 +67,7 @@ int main(void)
         cmocka_unit_test(test_export_full),        /* */
         cmocka_unit_test(test_export_tax_details), /* */
         cmocka_unit_test(test_export_store),       /* */
-        // cmocka_unit_test(test_export_history),     /* */
+        cmocka_unit_test(test_export_history),     /* */
     };
 
     return cmocka_run_group_tests(test_suite, setup_sample_model_objects, NULL);
