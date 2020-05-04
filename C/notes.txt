@@ -1,9 +1,10 @@
 23.04.2020	2h	Project setup, java2c (generates cpp), 2 files done.
 24.04.2020	2h	again 2 files done.
 25.04.2020 	2.5h	Store and Store Event, more complex, not done.
-30.04.2020  2.5h	remove Polymorphy, finish StoreEvent. Util. TaxCalculator.
-01.05.2020  1h	sample objects, sample test
-            1.5h	XMLExporter with StringBuilder
-02.05.2020  2.0h	Abgleich mit C# und Java, 1st Approval test
-            1.0h    Minimal Approval framework
-03.05.2020  1.0h    Approvals anpassen, laufen
+30.04.2020	2.5h	remove Polymorphy, finish StoreEvent. Util. TaxCalculator.
+01.05.2020	1h	sample objects, sample test
+           	1.5h	XMLExporter with StringBuilder
+02.05.2020	2.0h	Abgleich mit C# und Java, 1st Approval test
+          	1.0h    Minimal Approval framework
+03.05.2020	1.0h    Approvals anpassen, laufen
+04.05.2020	1.0h	Last Approval, finishing touches malloc, move mu_approvals
