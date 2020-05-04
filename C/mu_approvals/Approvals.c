@@ -1,3 +1,8 @@
+/***********************************************************************
+ * Mu Approvals - micro Approvals for C99.
+ * Copyright (c) 2020, Peter Kofler. All rights reserved.
+ * BSD licensed.
+ */
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
