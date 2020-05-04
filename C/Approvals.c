@@ -79,7 +79,7 @@ static void approvals_save(const char* filename, const char* data)
     }
     size_t written = fwrite(data, sizeof(char), strlen(data), file);
     if (written != strlen(data)) {
-        fprintf(stderr, "Could not write %s, %d instead %d bytes\n", filename,
+        fprintf(stderr, "Could not write %s, %u instead %u bytes\n", filename,
                 strlen(data), written);
     }
     int error_flush = fflush(file);
