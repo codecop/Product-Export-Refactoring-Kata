@@ -57,3 +57,5 @@ dkms.conf
 # local help scripts
 _compile.bat
 _test.bat
+
+*.received.*
