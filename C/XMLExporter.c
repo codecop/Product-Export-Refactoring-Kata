@@ -11,7 +11,7 @@
 #include <time.h>
 
 static const char* stylist_for(const struct Product*);
-static const char* make_format(double);
+static const char* make_formatted_double(double);
 
 const char* xml_export_full(const struct LinkedList* orders)
 {
@@ -48,7 +48,7 @@ const char* xml_export_full(const struct LinkedList* orders)
             sb_append(xml, " currency='");
             sb_append(xml, get_price_currency(get_product_price(product)));
             sb_append(xml, "'>");
-            const char* formatted = make_format(get_price_amount(get_product_price(product)));
+            const char* formatted = make_formatted_double(get_price_amount(get_product_price(product)));
             sb_append(xml, formatted);
             free((void*)formatted);
             sb_append(xml, "</price>");
@@ -72,7 +72,7 @@ const char* xml_export_tax_details(struct LinkedList* orders)
         const struct Order* order = (const struct Order*)node->data;
         sb_append(xml, "<order");
         sb_append(xml, " date='");
-        const char* formatted = to_iso_date(get_order_date(order));
+        const char* formatted = make_iso_date_str(get_order_date(order));
         sb_append(xml, formatted);
         free((void*)formatted);
         sb_append(xml, "'");
@@ -100,7 +100,7 @@ const char* xml_export_tax_details(struct LinkedList* orders)
             tax += 10;
         else
             tax += 20;
-        const char* formatted_tax = make_format(tax);
+        const char* formatted_tax = make_formatted_double(tax);
         sb_append(xml, formatted_tax);
         free((void*)formatted_tax);
         sb_append(xml, "</orderTax>");
@@ -108,14 +108,14 @@ const char* xml_export_tax_details(struct LinkedList* orders)
     }
 
     double total_tax = calculate_added_tax(orders);
-    const char* formatted_total_tax = make_format(total_tax);
+    const char* formatted_total_tax = make_formatted_double(total_tax);
     sb_append(xml, formatted_total_tax);
     free((void*)formatted_total_tax);
     sb_append(xml, "</orderTax>");
     return sb_string(xml);
 }
 
-static const char* make_format(double d)
+static const char* make_formatted_double(double d)
 {
     char* s = (char*)malloc(sizeof(char[24 + 1]));
     sprintf(s, "%03.2f", d);
@@ -154,7 +154,7 @@ const char* xml_export_store(struct Store* store)
         sb_append(xml, " currency='");
         sb_append(xml, get_price_currency(get_product_price(product)));
         sb_append(xml, "'>");
-        const char* formatted = make_format(get_price_amount(get_product_price(product)));
+        const char* formatted = make_formatted_double(get_price_amount(get_product_price(product)));
         sb_append(xml, formatted);
         free((void*)formatted);
         sb_append(xml, "</price>");
@@ -174,7 +174,7 @@ const char* xml_export_history(struct LinkedList* orders)
     sb_append(xml, "<orderHistory");
     sb_append(xml, " createdAt='");
     time_t now = time(NULL);
-    const char* formatted_now = to_iso_date(now);
+    const char* formatted_now = make_iso_date_str(now);
     sb_append(xml, formatted_now);
     free((void*)formatted_now);
     sb_append(xml, "'");
@@ -183,12 +183,12 @@ const char* xml_export_history(struct LinkedList* orders)
         const struct Order* order = (const struct Order*)node->data;
         sb_append(xml, "<order");
         sb_append(xml, " date='");
-        const char* formatted_date = to_iso_date(get_order_date(order));
+        const char* formatted_date = make_iso_date_str(get_order_date(order));
         sb_append(xml, formatted_date);
         free((void*)formatted_date);
         sb_append(xml, "'");
         sb_append(xml, " totalDollars='");
-        const char* formatted_total = make_format(order_total_dollars(order));
+        const char* formatted_total = make_formatted_double(order_total_dollars(order));
         sb_append(xml, formatted_total);
         free((void*)formatted_total);
         sb_append(xml, "'>");

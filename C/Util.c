@@ -24,16 +24,15 @@ time_t from_iso_date(const char* datetime)
     return utc_time;
 }
 
-const char* to_iso_date(const time_t date)
+const char* make_iso_date_str(const time_t date)
 {
-    struct tm* utc = gmtime(&date);
+    struct tm utc = *gmtime(&date);
     /* compensate expected ranges */
-    utc->tm_year = utc->tm_year + 1900;
-    utc->tm_mon = utc->tm_mon + 1;
+    utc.tm_year = utc.tm_year + 1900;
+    utc.tm_mon = utc.tm_mon + 1;
 
     char* s = (char*)malloc(sizeof(char[17 + 1]));
     sprintf(s, "%04d-%02d-%02dT%02d:%02dZ", /* */
-            utc->tm_year, utc->tm_mon, utc->tm_mday, utc->tm_hour, utc->tm_min);
-    free(utc);
+            utc.tm_year, utc.tm_mon, utc.tm_mday, utc.tm_hour, utc.tm_min);
     return s;
 }

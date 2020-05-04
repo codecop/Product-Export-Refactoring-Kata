@@ -21,6 +21,15 @@ static void test_util_from_iso_date(void** state)
     assert_int_equal(1514764800L, from_iso_date("2018-01-01T00:00Z"));
 }
 
+static void test_util_to_iso_date(void** state)
+{
+    (void)state; /* unused */
+
+    const char* iso_date = make_iso_date_str(1514764800L);
+    assert_string_equal("2018-01-01T00:00Z", iso_date);
+    free((void*)iso_date);
+}
+
 static void test_price_functions(void** state)
 {
     (void)state; /* unused */
@@ -93,7 +102,9 @@ static void test_string_builder(void** state)
     sb_append_long(sb, 3);
     sb_append(sb, " ");
     sb_append_double(sb, 1.1);
-    assert_string_equal("foo3 1.100000", sb_string(sb));
+    const char* result1 = sb_string(sb);
+    assert_string_equal("foo3 1.100000", result1);
+    free((void*)result1);
 
     /* grow */
     sb = make_sb();
@@ -101,23 +112,26 @@ static void test_string_builder(void** state)
     sb_append(sb, "1234567890abcdef");
     sb_append(sb, "1234567890ABCDEF");
     sb_append(sb, "1234567890ABCDEF");
+    const char* result2 = sb_string(sb);
     assert_string_equal(
         "1234567890ABCDEF"
         "1234567890abcdef"
         "1234567890ABCDEF"
         "1234567890ABCDEF",
-        sb_string(sb));
+        result2);
+    free((void*)result2);
 }
 
 int main(void)
 {
     const struct CMUnitTest test_suite[] = {
-        cmocka_unit_test(test_util_from_iso_date), /* */
-        cmocka_unit_test(test_price_functions),       /* */
-        cmocka_unit_test(test_linked_list_append),    /* */
-        cmocka_unit_test(test_sample_product),        /* */
-        cmocka_unit_test(test_calculate_added_tax),   /* */
-        cmocka_unit_test(test_string_builder),        /* */
+        cmocka_unit_test(test_util_from_iso_date),  /* */
+        cmocka_unit_test(test_util_to_iso_date),    /* */
+        cmocka_unit_test(test_price_functions),     /* */
+        cmocka_unit_test(test_linked_list_append),  /* */
+        cmocka_unit_test(test_sample_product),      /* */
+        cmocka_unit_test(test_calculate_added_tax), /* */
+        cmocka_unit_test(test_string_builder),      /* */
     };
 
     return cmocka_run_group_tests(test_suite, NULL, NULL);
