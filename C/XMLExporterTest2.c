@@ -7,6 +7,7 @@
 #include "XMLExporter.h"
 #include "mu_approvals\Approvals.h"
 #include <cmocka.h>
+#include <string.h>
 
 struct LinkedList* orders;
 
@@ -54,10 +55,10 @@ static void test_export_history(void** state)
 
     const char* xml = xml_export_history(orders);
 
-    /*
-    const char* regex = "createdAt='[^']+'";
-    xml = xmlreplace_first(regex, "createdAt='2018-09-20T00:00Z'");
-    */
+    char* first_created = strstr(xml, "createdAt");
+    first_created += 9 + 1 /* = */ + 1 /* " */;
+    memcpy(first_created, "2018-09-20T00:00Z", 17);
+
     verify_xml(xml, "exportHistory");
 }
 
