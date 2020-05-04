@@ -4,7 +4,7 @@
 #include <string.h>
 
 #define READ_BUFFER 1000
-static char read_buffer[READ_BUFFER];
+static char read_buffer[READ_BUFFER + 1];
 
 static const char* approvals_file_name_for(const char* full_file_name,
                                            const char* test_name,
@@ -28,7 +28,7 @@ static const char* approvals_file_name_for(const char* full_file_name,
     length += 8; /* "approved" or "received" */
     length += 1; /* . */
     length += strlen(extension_no_dot);
-    length += 1; /* NULL */
+    length += 1; /* \0 */
     char* s = (char*)malloc(length);
 
     char* offset = s;
@@ -49,20 +49,20 @@ static const char* approvals_file_name_for(const char* full_file_name,
     offset += 8;
     strcpy(offset, ".");
     offset += 1;
-    strcpy(offset, extension_no_dot);
+    strcpy(offset, extension_no_dot); /* includes \0 */
 
     return s;
 }
 
 static const const char* approvals_load(const char* filename)
 {
-    memset(read_buffer, 0, READ_BUFFER);
     FILE* file = fopen(filename, "r");
     if (file == NULL) {
         fprintf(stderr, "Could not open file %s\n", filename);
         return "";
     }
-    fread(read_buffer, sizeof(char), READ_BUFFER, file);
+    size_t read = fread(read_buffer, sizeof(char), READ_BUFFER, file);
+    read_buffer[read] = '\0';
     int error_close = fclose(file);
     if (error_close) {
         fprintf(stderr, "Could not close %s, error %d\n", filename, error_close);
