@@ -29,7 +29,6 @@ static void test_price_functions(void** state)
     assert_string_equal("USD", get_price_currency(price));
     assert_float_equal(1.2, get_price_amount(price), 0.001);
     assert_float_equal(1.2, get_price_amount_in_currency(price, "USD"), 0.001);
-    assert_string_equal("Price{1.200000}", price_to_string(price));
 
     free((void*)price);
 }
@@ -64,7 +63,6 @@ static void test_sample_product(void** state)
 
     assert_string_equal("Cherry Bloom", get_product_name(CherryBloom));
     assert_string_equal("LIPSTICK01", get_product_id(CherryBloom));
-    assert_string_equal("Product{Cherry Bloom}", product_to_string(CherryBloom));
     assert_int_equal(30, get_product_weight(CherryBloom));
     assert_int_equal(0, is_product_event(CherryBloom));
 }

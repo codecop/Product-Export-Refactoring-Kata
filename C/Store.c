@@ -59,13 +59,6 @@ const char* get_store_id(const struct Store* this)
     return this->id;
 }
 
-const char* store_to_string(const struct Store* this)
-{
-    char* s = (char*)malloc(sizeof(char[7 + 20 + 1]));
-    sprintf(s, "Store{%s}", this->name);
-    return s;
-}
-
 void save_store_to_database(const struct Store* this)
 {
     (void)this; /* unused */

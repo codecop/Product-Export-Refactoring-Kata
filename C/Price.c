@@ -15,13 +15,6 @@ const struct Price* make_price(double amount, const char* currency_code)
     return this;
 }
 
-const char* price_to_string(const struct Price* this)
-{
-    char* s = (char*)malloc(sizeof(char[7 + 9 + 1]));
-    sprintf(s, "Price{%f}", this->amount);
-    return s;
-}
-
 const char* get_price_currency(const struct Price* this)
 {
     return this->currency_code;

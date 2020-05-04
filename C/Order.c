@@ -37,13 +37,6 @@ double order_total_dollars(const struct Order* this)
     return dollars;
 }
 
-const char* order_to_string(const struct Order* this)
-{
-    char* s = (char*)malloc(sizeof(char[7 + 20 + 1]));
-    sprintf(s, "Order{%s}", this->id);
-    return s;
-}
-
 void save_order_to_database(const struct Order* this)
 {
     (void)this; /* unused */

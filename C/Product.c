@@ -41,22 +41,6 @@ const char* get_product_id(const struct Product* this)
     return this->id;
 }
 
-const char* product_to_string(const struct Product* this)
-{
-    bool is_product_event(const struct Product*);
-
-    if (is_product_event(this)) {
-        char* s = (char*)malloc(sizeof(char[12 + 20 + 1]));
-        sprintf(s, "StoreEvent{%s}", this->name);
-        return s;
-    }
-    else {
-        char* s = (char*)malloc(sizeof(char[9 + 20 + 1]));
-        sprintf(s, "Product{%s}", this->name);
-        return s;
-    }
-}
-
 int get_product_weight(const struct Product* this)
 {
     return this->weight;
