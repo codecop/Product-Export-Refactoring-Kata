@@ -1,9 +1,13 @@
-#include <setjmp.h> /* used by mocka */
-#include <stdarg.h> /* used by mocka */
-#include <stddef.h> /* used by mocka */
+#include <setjmp.h> /* used by cmocka */
+#include <stdarg.h> /* used by cmocka */
+#include <stddef.h> /* used by cmocka */
 
+#include "LinkedList.h"
+#include "SampleModelObjects.h"
 #include "XMLExporter.h"
+#include "mu_approvals\Approvals.h"
 #include <cmocka.h>
+#include <string.h>
 
 static void test_something(void** state)
 {

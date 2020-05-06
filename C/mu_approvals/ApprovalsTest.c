@@ -3,9 +3,9 @@
  * Copyright (c) 2020, Peter Kofler. All rights reserved.
  * BSD licensed.
  */
-#include <setjmp.h> /* for mocka */
-#include <stdarg.h> /* for mocka */
-#include <stddef.h> /* for mocka */
+#include <setjmp.h> /* used by cmocka */
+#include <stdarg.h> /* used by cmocka */
+#include <stddef.h> /* used by cmocka */
 
 #include <cmocka.h>
 

@@ -1,6 +1,6 @@
-#include <setjmp.h> /* used by mocka */
-#include <stdarg.h> /* used by mocka */
-#include <stddef.h> /* used by mocka */
+#include <setjmp.h> /* used by cmocka */
+#include <stdarg.h> /* used by cmocka */
+#include <stddef.h> /* used by cmocka */
 
 #include "LinkedList.h"
 #include "SampleModelObjects2.h"
