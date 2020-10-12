@@ -1,0 +1,15 @@
+eclipse.preferences.version=1
+environment/project/cdt.managedbuild.toolchain.gnu.mingw.base.24974647.1215637920/CWD/delimiter=;
+environment/project/cdt.managedbuild.toolchain.gnu.mingw.base.24974647.1215637920/CWD/operation=replace
+environment/project/cdt.managedbuild.toolchain.gnu.mingw.base.24974647.1215637920/CWD/value=E\:\\Uebungen\\Code Katas\\My Katas\\Product Export\\Product-Export-Refactoring-Kata\\C
+environment/project/cdt.managedbuild.toolchain.gnu.mingw.base.24974647.1215637920/C_INCLUDE_PATH/delimiter=;
+environment/project/cdt.managedbuild.toolchain.gnu.mingw.base.24974647.1215637920/C_INCLUDE_PATH/operation=replace
+environment/project/cdt.managedbuild.toolchain.gnu.mingw.base.24974647.1215637920/C_INCLUDE_PATH/value=E\:\\Develop\\C\\Katas\\lib\\cmocka-1.1.5_x64\\include;E\:\\Develop\\C\\ApprovalTests.c\\include
+environment/project/cdt.managedbuild.toolchain.gnu.mingw.base.24974647.1215637920/LIBRARY_PATH/delimiter=;
+environment/project/cdt.managedbuild.toolchain.gnu.mingw.base.24974647.1215637920/LIBRARY_PATH/operation=replace
+environment/project/cdt.managedbuild.toolchain.gnu.mingw.base.24974647.1215637920/LIBRARY_PATH/value=C\:/PROGRA~1/Gambit/v4.8.1/lib;E\:\\Develop\\C\\Katas\\lib\\cmocka-1.1.5_x64\\lib;E\:\\Develop\\C\\ApprovalTests.c\\lib
+environment/project/cdt.managedbuild.toolchain.gnu.mingw.base.24974647.1215637920/PWD/delimiter=;
+environment/project/cdt.managedbuild.toolchain.gnu.mingw.base.24974647.1215637920/PWD/operation=replace
+environment/project/cdt.managedbuild.toolchain.gnu.mingw.base.24974647.1215637920/PWD/value=E\:\\Uebungen\\Code Katas\\My Katas\\Product Export\\Product-Export-Refactoring-Kata\\C
+environment/project/cdt.managedbuild.toolchain.gnu.mingw.base.24974647.1215637920/append=true
+environment/project/cdt.managedbuild.toolchain.gnu.mingw.base.24974647.1215637920/appendContributed=true
