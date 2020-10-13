@@ -109,8 +109,8 @@ static void export_order(struct StringBuilder* xml, const struct Order* order, u
  * ****************************************
  */
 
-static void export_full_order(struct StringBuilder* xml, const struct Order* order);
 static void export_full_orders(struct StringBuilder* xml, const struct LinkedList* orders);
+static void export_full_order(struct StringBuilder* xml, const struct Order* order);
 static void export_full_product(struct StringBuilder* xml, const struct Product* product);
 
 const char* xml_export_full(const struct LinkedList* orders)
@@ -141,7 +141,6 @@ static void export_full_product(struct StringBuilder* xml, const struct Product*
 
 static void export_tax_detail_orders(struct StringBuilder* xml, struct LinkedList* orders);
 static void export_tax_detail_order(struct StringBuilder* xml, const struct Order* order);
-static void export_order_tax(struct StringBuilder* xml, const struct Order* order);
 static void export_plain_product(struct StringBuilder* xml, const struct Product* product);
 
 const char* xml_export_tax_details(struct LinkedList* orders)
