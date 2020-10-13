@@ -2,6 +2,7 @@
 #include "Order.h"
 #include "Price.h"
 #include "Product.h"
+#include "StoreEvent.h"
 #include "Store.h"
 #include "TaxCalculator.h"
 #include "XmlBuilder.h"
@@ -9,37 +10,11 @@
 
 static const char* stylist_for(const struct Product*);
 
-#define PRODUCT_DETAIL_WEIGHT 2
-#define PRODUCT_DETAIL_PRICE 4
-
-static void export_plain_product(struct StringBuilder* xml, const struct Product* product)
-{
-    xml_open(xml, "product");
-    xml_attribute_s(xml, "id", get_product_id(product));
-
-    xml_text_s(xml, get_product_name(product));
-    xml_close(xml, "product");
-}
-
-static void export_store_product(struct StringBuilder* xml, struct Store* store, const struct Product* product)
-{
-    xml_open(xml, "product");
-    xml_attribute_s(xml, "id", get_product_id(product));
-
-    if (is_product_event(product)) {
-        xml_attribute_s(xml, "location", get_store_name(store));
-    }
-    if (get_product_weight(product) > 0) {
-        xml_attribute_l(xml, "weight", get_product_weight(product));
-    }
-    xml_open(xml, "price");
-    xml_attribute_s(xml, "currency", get_price_currency(get_product_price(product)));
-    xml_text_d(xml, get_price_amount(get_product_price(product)));
-    xml_close(xml, "price");
-
-    xml_text_s(xml, get_product_name(product));
-    xml_close(xml, "product");
-}
+#define PRODUCT_DETAIL_NONE 0
+#define PRODUCT_WITH_LOCATION 1
+#define PRODUCT_WITH_STYLIST 2
+#define PRODUCT_WITH_WEIGHT 4
+#define PRODUCT_WITH_PRICE 8
 
 static void export_product_price(struct StringBuilder* xml, const struct Product* product)
 {
@@ -49,23 +24,50 @@ static void export_product_price(struct StringBuilder* xml, const struct Product
     xml_close(xml, "price");
 }
 
-static void export_full_product(struct StringBuilder* xml, const struct Product* product)
+static void export_product(struct StringBuilder* xml, const struct Product* product, unsigned int details)
 {
     xml_open(xml, "product");
     xml_attribute_s(xml, "id", get_product_id(product));
 
-    if (is_product_event(product)) {
-        xml_attribute_s(xml, "stylist", stylist_for(product));
+    if (details & PRODUCT_WITH_LOCATION) {
+        if (is_product_event(product)) {
+            xml_attribute_s(xml, "location", get_store_name(get_store_event_location(product)));
+        }
     }
 
-    if (get_product_weight(product) > 0) {
-        xml_attribute_l(xml, "weight", get_product_weight(product));
+    if (details & PRODUCT_WITH_STYLIST) {
+        if (is_product_event(product)) {
+            xml_attribute_s(xml, "stylist", stylist_for(product));
+        }
     }
 
-    export_product_price(xml, product);
+    if (details & PRODUCT_WITH_WEIGHT) {
+        if (get_product_weight(product) > 0) {
+            xml_attribute_l(xml, "weight", get_product_weight(product));
+        }
+    }
+
+    if (details & PRODUCT_WITH_PRICE) {
+        export_product_price(xml, product);
+    }
+
     xml_text_s(xml, get_product_name(product));
     xml_close(xml, "product");
+}
 
+static void export_plain_product(struct StringBuilder* xml, const struct Product* product)
+{
+    export_product(xml, product, PRODUCT_DETAIL_NONE);
+}
+
+static void export_store_product(struct StringBuilder* xml, const struct Product* product)
+{
+    export_product(xml, product, PRODUCT_WITH_LOCATION | PRODUCT_WITH_WEIGHT | PRODUCT_WITH_PRICE);
+}
+
+static void export_full_product(struct StringBuilder* xml, const struct Product* product)
+{
+    export_product(xml, product, PRODUCT_WITH_STYLIST | PRODUCT_WITH_WEIGHT | PRODUCT_WITH_PRICE);
 }
 
 static void export_full_order(struct StringBuilder* xml, const struct Order* order);
@@ -157,7 +159,7 @@ static void export_store(struct StringBuilder* xml, struct Store* store)
     xml_open(xml, "store");
     xml_attribute_s(xml, "name", get_store_name(store));
     linked_list_each(const struct Product*, product, get_store_stock(store),
-         export_store_product(xml, store, product);
+         export_store_product(xml, product);
     )
     xml_close(xml, "store");
 }
