@@ -71,6 +71,11 @@ void xml_close(struct StringBuilder* xml, const char* name)
     sb_append(xml, ">");
 }
 
+const char* xml_string(struct StringBuilder* xml)
+{
+    return sb_string(xml);
+}
+
 static const char* stylist_for(const struct Product*);
 static const char* make_formatted_double(double);
 
@@ -140,7 +145,7 @@ const char* xml_export_full(const struct LinkedList* orders)
     }
 
     xml_close(xml, "orders");
-    return sb_string(xml);
+    return xml_string(xml);
 }
 
 const char* xml_export_tax_details(struct LinkedList* orders)
@@ -182,7 +187,7 @@ const char* xml_export_tax_details(struct LinkedList* orders)
     xml_text(xml, formatted_total_tax);
     free((void*)formatted_total_tax);
     xml_close(xml, "orderTax");
-    return sb_string(xml);
+    return xml_string(xml);
 }
 
 static const char* make_formatted_double(double d)
@@ -205,7 +210,7 @@ const char* xml_export_store(struct Store* store)
 
     xml_close(xml, "store");
 
-    return sb_string(xml);
+    return xml_string(xml);
 }
 
 const char* xml_export_history(struct LinkedList* orders)
@@ -236,7 +241,7 @@ const char* xml_export_history(struct LinkedList* orders)
     }
 
     xml_close(xml, "orderHistory");
-    return sb_string(xml);
+    return xml_string(xml);
 }
 
 static const char* stylist_for(const struct Product* product)
