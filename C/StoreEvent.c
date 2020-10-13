@@ -25,3 +25,9 @@ void store_event_set_location(struct Product* this, struct Store* store)
     product_set_location(this, store);
     store_add_store_event(store, this);
 }
+
+struct Store* get_store_event_location(const struct Product* this)
+{
+    struct Store* store = (struct Store*)get_product_location(this);
+    return store;
+}

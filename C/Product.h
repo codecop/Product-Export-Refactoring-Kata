@@ -13,3 +13,4 @@ extern const struct Price* get_product_price(const struct Product* this);
 extern bool is_product_event(const struct Product* this);
 
 extern void product_set_location(struct Product* this, void* location_store);
+extern void* get_product_location(const struct Product* this);

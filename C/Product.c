@@ -59,3 +59,8 @@ void product_set_location(struct Product* this, void* location_store)
 {
     this->location = location_store;
 }
+
+void* get_product_location(const struct Product* this)
+{
+    return this->location;
+}
