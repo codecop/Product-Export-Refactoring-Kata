@@ -1,6 +1,12 @@
 #ifndef LINKED_LIST
 #define LINKED_LIST
 
+#define linked_list_each(declaration, identifier, list, body)                      \
+    for (const struct LinkedList* node = list; node; node = node->next) { \
+        declaration identifier = (declaration)node->data; \
+        body \
+    }
+
 struct LinkedList {
     const void* data;
     struct LinkedList* next;

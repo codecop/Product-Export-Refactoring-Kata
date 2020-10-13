@@ -35,15 +35,12 @@ const char* xml_export_full(const struct LinkedList* orders)
 
     xml_open(xml, "orders");
 
-    for (const struct LinkedList* node = orders; node; node = node->next) {
-        const struct Order* order = (const struct Order*)node->data;
+    linked_list_each(const struct Order*, order, orders,
 
         xml_open(xml, "order");
         xml_attribute_s(xml, "id", get_order_id(order));
 
-        const struct LinkedList* products = get_order_products(order);
-        for (const struct LinkedList* node = products; node; node = node->next) {
-            const struct Product* product = (const struct Product*)node->data;
+        linked_list_each(const struct Product*, product, get_order_products(order),
 
             xml_open(xml, "product");
             xml_attribute_s(xml, "id", get_product_id(product));
@@ -55,10 +52,10 @@ const char* xml_export_full(const struct LinkedList* orders)
 
             xml_text_s(xml, get_product_name(product));
             xml_close(xml, "product");
-        }
+        )
 
         xml_close(xml, "order");
-    }
+    )
 
     xml_close(xml, "orders");
 
@@ -71,22 +68,16 @@ const char* xml_export_tax_details(struct LinkedList* orders)
 
     xml_open(xml, "orderTax");
 
-    for (const struct LinkedList* node = orders; node; node = node->next) {
-        const struct Order* order = (const struct Order*)node->data;
-
+    linked_list_each(const struct Order*, order, orders,
         xml_open(xml, "order");
         xml_attribute_date(xml, "date", get_order_date(order));
 
-        const struct LinkedList* products = get_order_products(order);
-        for (const struct LinkedList* node = products; node; node = node->next) {
-            const struct Product* product = (const struct Product*)node->data;
-
+        linked_list_each(const struct Product*, product, get_order_products(order),
             xml_open(xml, "product");
             xml_attribute_s(xml, "id", get_product_id(product));
             xml_text_s(xml, get_product_name(product));
             xml_close(xml, "product");
-
-        }
+        )
 
         xml_open(xml, "orderTax");
         xml_attribute_s(xml, "currency", "USD");
@@ -97,7 +88,7 @@ const char* xml_export_tax_details(struct LinkedList* orders)
         xml_close(xml, "orderTax");
 
         xml_close(xml, "order");
-    }
+    )
 
     xml_text_d(xml, calculate_added_tax(orders));
     xml_close(xml, "orderTax");
@@ -112,10 +103,7 @@ const char* xml_export_store(struct Store* store)
     xml_open(xml, "store");
     xml_attribute_s(xml, "name", get_store_name(store));
 
-    const struct LinkedList* products = get_store_stock(store);
-    for (const struct LinkedList* node = products; node; node = node->next) {
-        const struct Product* product = (const struct Product*)node->data;
-
+    linked_list_each(const struct Product*, product, get_store_stock(store),
         xml_open(xml, "product");
         xml_attribute_s(xml, "id", get_product_id(product));
         if (is_product_event(product)) {
@@ -124,7 +112,7 @@ const char* xml_export_store(struct Store* store)
         xml_product(xml, product, PRODUCT_DETAIL_WEIGHT | PRODUCT_DETAIL_PRICE);
         xml_text_s(xml, get_product_name(product));
         xml_close(xml, "product");
-    }
+    )
 
     xml_close(xml, "store");
 
@@ -138,26 +126,21 @@ const char* xml_export_history(struct LinkedList* orders)
     xml_open(xml, "orderHistory");
     xml_attribute_date(xml, "createdAt", time(NULL));
 
-    for (const struct LinkedList* node = orders; node; node = node->next) {
-        const struct Order* order = (const struct Order*)node->data;
+    linked_list_each(const struct Order*, order, orders,
 
         xml_open(xml, "order");
         xml_attribute_date(xml, "date", get_order_date(order));
         xml_attribute_d(xml, "totalDollars", order_total_dollars(order));
 
-        const struct LinkedList* products = get_order_products(order);
-        for (const struct LinkedList* node = products; node; node = node->next) {
-            const struct Product* product = (const struct Product*)node->data;
-
+        linked_list_each(const struct Product*, product, get_order_products(order),
             xml_open(xml, "product");
             xml_attribute_s(xml, "id", get_product_id(product));
             xml_text_s(xml, get_product_name(product));
             xml_close(xml, "product");
-
-        }
+        )
 
         xml_close(xml, "order");
-    }
+    )
 
     xml_close(xml, "orderHistory");
 
