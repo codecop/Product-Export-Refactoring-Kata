@@ -10,6 +10,11 @@
 
 static const char* stylist_for(const struct Product*);
 
+/* ****************************************
+ * Generic export product
+ * ****************************************
+ */
+
 #define PRODUCT_DETAIL_NONE 0
 #define PRODUCT_WITH_LOCATION 1
 #define PRODUCT_WITH_STYLIST 2
@@ -55,23 +60,58 @@ static void export_product(struct StringBuilder* xml, const struct Product* prod
     xml_close(xml, "product");
 }
 
-static void export_plain_product(struct StringBuilder* xml, const struct Product* product)
+/* ****************************************
+ * Generic export order
+ * ****************************************
+ */
+
+#define ORDER_DETAIL_NONE 0
+#define ORDER_WITH_ID 16
+#define ORDER_WITH_DATE 32
+#define ORDER_WITH_DOLLAR 64
+#define ORDER_WITH_TAX 128
+
+static void export_order_tax(struct StringBuilder* xml, const struct Order* order)
 {
-    export_product(xml, product, PRODUCT_DETAIL_NONE);
+    xml_open(xml, "orderTax");
+    xml_attribute_s(xml, "currency", "USD");
+    xml_text_d(xml, order_tax(order));
+    xml_close(xml, "orderTax");
 }
 
-static void export_store_product(struct StringBuilder* xml, const struct Product* product)
+static void export_order(struct StringBuilder* xml, const struct Order* order, unsigned int details, void export_p(struct StringBuilder*, const struct Product*))
 {
-    export_product(xml, product, PRODUCT_WITH_LOCATION | PRODUCT_WITH_WEIGHT | PRODUCT_WITH_PRICE);
+    xml_open(xml, "order");
+
+    if (details & ORDER_WITH_ID) {
+        xml_attribute_s(xml, "id", get_order_id(order));
+    }
+    if (details & ORDER_WITH_DATE) {
+        xml_attribute_date(xml, "date", get_order_date(order));
+    }
+    if (details & ORDER_WITH_DOLLAR) {
+        xml_attribute_d(xml, "totalDollars", order_total_dollars(order));
+    }
+
+    linked_list_each(const struct Product*, product, get_order_products(order),
+        export_p(xml, product);
+    )
+
+    if (details & ORDER_WITH_TAX) {
+        export_order_tax(xml, order);
+    }
+
+    xml_close(xml, "order");
 }
 
-static void export_full_product(struct StringBuilder* xml, const struct Product* product)
-{
-    export_product(xml, product, PRODUCT_WITH_STYLIST | PRODUCT_WITH_WEIGHT | PRODUCT_WITH_PRICE);
-}
+/* ****************************************
+ * Specific methods
+ * ****************************************
+ */
 
 static void export_full_order(struct StringBuilder* xml, const struct Order* order);
 static void export_full_orders(struct StringBuilder* xml, const struct LinkedList* orders);
+static void export_full_product(struct StringBuilder* xml, const struct Product* product);
 
 const char* xml_export_full(const struct LinkedList* orders)
 {
@@ -91,19 +131,18 @@ static void export_full_orders(struct StringBuilder* xml, const struct LinkedLis
 
 static void export_full_order(struct StringBuilder* xml, const struct Order* order)
 {
-    xml_open(xml, "order");
-    xml_attribute_s(xml, "id", get_order_id(order));
+    export_order(xml, order, ORDER_WITH_ID, export_full_product);
+}
 
-    linked_list_each(const struct Product*, product, get_order_products(order),
-        export_full_product(xml, product);
-    )
-
-    xml_close(xml, "order");
+static void export_full_product(struct StringBuilder* xml, const struct Product* product)
+{
+    export_product(xml, product, PRODUCT_WITH_STYLIST | PRODUCT_WITH_WEIGHT | PRODUCT_WITH_PRICE);
 }
 
 static void export_tax_detail_orders(struct StringBuilder* xml, struct LinkedList* orders);
 static void export_tax_detail_order(struct StringBuilder* xml, const struct Order* order);
 static void export_order_tax(struct StringBuilder* xml, const struct Order* order);
+static void export_plain_product(struct StringBuilder* xml, const struct Product* product);
 
 const char* xml_export_tax_details(struct LinkedList* orders)
 {
@@ -126,26 +165,16 @@ static void export_tax_detail_orders(struct StringBuilder* xml, struct LinkedLis
 
 static void export_tax_detail_order(struct StringBuilder* xml, const struct Order* order)
 {
-    xml_open(xml, "order");
-    xml_attribute_date(xml, "date", get_order_date(order));
-
-    linked_list_each(const struct Product*, product, get_order_products(order),
-        export_plain_product(xml, product);
-    )
-
-    export_order_tax(xml, order);
-    xml_close(xml, "order");
+    export_order(xml, order, ORDER_WITH_DATE | ORDER_WITH_TAX, export_plain_product);
 }
 
-static void export_order_tax(struct StringBuilder* xml, const struct Order* order)
+static void export_plain_product(struct StringBuilder* xml, const struct Product* product)
 {
-    xml_open(xml, "orderTax");
-    xml_attribute_s(xml, "currency", "USD");
-    xml_text_d(xml, order_tax(order));
-    xml_close(xml, "orderTax");
+    export_product(xml, product, PRODUCT_DETAIL_NONE);
 }
 
 static void export_store(struct StringBuilder* xml, struct Store* store);
+static void export_store_product(struct StringBuilder* xml, const struct Product* product);
 
 const char* xml_export_store(struct Store* store)
 {
@@ -162,6 +191,11 @@ static void export_store(struct StringBuilder* xml, struct Store* store)
          export_store_product(xml, product);
     )
     xml_close(xml, "store");
+}
+
+static void export_store_product(struct StringBuilder* xml, const struct Product* product)
+{
+    export_product(xml, product, PRODUCT_WITH_LOCATION | PRODUCT_WITH_WEIGHT | PRODUCT_WITH_PRICE);
 }
 
 static void export_order_history(struct StringBuilder* xml, struct LinkedList* orders);
@@ -186,15 +220,7 @@ static void export_order_history(struct StringBuilder* xml, struct LinkedList* o
 
 static void export_order_history_order(struct StringBuilder* xml, const struct Order* order)
 {
-    xml_open(xml, "order");
-    xml_attribute_date(xml, "date", get_order_date(order));
-
-    xml_attribute_d(xml, "totalDollars", order_total_dollars(order));
-
-    linked_list_each(const struct Product*, product, get_order_products(order),
-        export_plain_product(xml, product);
-    )
-    xml_close(xml, "order");
+    export_order(xml, order, ORDER_WITH_DATE | ORDER_WITH_DOLLAR, export_plain_product);
 }
 
 static const char* stylist_for(const struct Product* product)
