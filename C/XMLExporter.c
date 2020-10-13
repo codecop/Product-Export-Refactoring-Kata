@@ -20,6 +20,35 @@ struct StringBuilder* make_xml()
     return xml;
 }
 
+void xml_product(struct StringBuilder* xml, const struct Product* product)
+{
+    sb_append(xml, "<product");
+    sb_append(xml, " id='");
+    sb_append(xml, get_product_id(product));
+    sb_append(xml, "'");
+    if (is_product_event(product)) {
+        sb_append(xml, " stylist='");
+        sb_append(xml, stylist_for(product));
+        sb_append(xml, "'");
+    }
+    if (get_product_weight(product) > 0) {
+        sb_append(xml, " weight='");
+        sb_append_long(xml, get_product_weight(product));
+        sb_append(xml, "'");
+    }
+    sb_append(xml, ">");
+    sb_append(xml, "<price");
+    sb_append(xml, " currency='");
+    sb_append(xml, get_price_currency(get_product_price(product)));
+    sb_append(xml, "'>");
+    const char* formatted = make_formatted_double(get_price_amount(get_product_price(product)));
+    sb_append(xml, formatted);
+    free((void*)formatted);
+    sb_append(xml, "</price>");
+    sb_append(xml, get_product_name(product));
+    sb_append(xml, "</product>");
+}
+
 const char* xml_export_full(const struct LinkedList* orders)
 {
     struct StringBuilder* xml = make_xml();
@@ -33,33 +62,7 @@ const char* xml_export_full(const struct LinkedList* orders)
         const struct LinkedList* products = get_order_products(order);
         for (const struct LinkedList* node = products; node; node = node->next) {
             const struct Product* product = (const struct Product*)node->data;
-            sb_append(xml, "<product");
-            sb_append(xml, " id='");
-            sb_append(xml, get_product_id(product));
-            sb_append(xml, "'");
-            if (is_product_event(product)) {
-                sb_append(xml, " stylist='");
-                sb_append(xml, stylist_for(product));
-                sb_append(xml, "'");
-            }
-
-            if (get_product_weight(product) > 0) {
-                sb_append(xml, " weight='");
-                sb_append_long(xml, get_product_weight(product));
-                sb_append(xml, "'");
-            }
-
-            sb_append(xml, ">");
-            sb_append(xml, "<price");
-            sb_append(xml, " currency='");
-            sb_append(xml, get_price_currency(get_product_price(product)));
-            sb_append(xml, "'>");
-            const char* formatted = make_formatted_double(get_price_amount(get_product_price(product)));
-            sb_append(xml, formatted);
-            free((void*)formatted);
-            sb_append(xml, "</price>");
-            sb_append(xml, get_product_name(product));
-            sb_append(xml, "</product>");
+            xml_product(xml, product);
         }
 
         sb_append(xml, "</order>");
