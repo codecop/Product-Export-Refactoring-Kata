@@ -1,7 +1,7 @@
 eclipse.preferences.version=1
 environment/buildEnvironmentInclude/cdt.managedbuild.toolchain.gnu.mingw.base.24974647.1215637920/CPATH/delimiter=;
 environment/buildEnvironmentInclude/cdt.managedbuild.toolchain.gnu.mingw.base.24974647.1215637920/CPATH/operation=replace
-environment/buildEnvironmentInclude/cdt.managedbuild.toolchain.gnu.mingw.base.24974647.1215637920/CPATH/value=C\:/PROGRA~1/Gambit/v4.8.1/include
+environment/buildEnvironmentInclude/cdt.managedbuild.toolchain.gnu.mingw.base.24974647.1215637920/CPATH/value=
 environment/buildEnvironmentInclude/cdt.managedbuild.toolchain.gnu.mingw.base.24974647.1215637920/C_INCLUDE_PATH/delimiter=;
 environment/buildEnvironmentInclude/cdt.managedbuild.toolchain.gnu.mingw.base.24974647.1215637920/C_INCLUDE_PATH/operation=replace
 environment/buildEnvironmentInclude/cdt.managedbuild.toolchain.gnu.mingw.base.24974647.1215637920/C_INCLUDE_PATH/value=E\:\\Develop\\C\\Katas\\lib\\cmocka-1.1.5_x64\\include;E\:\\Develop\\C\\ApprovalTests.c\\include
@@ -9,7 +9,7 @@ environment/buildEnvironmentInclude/cdt.managedbuild.toolchain.gnu.mingw.base.24
 environment/buildEnvironmentInclude/cdt.managedbuild.toolchain.gnu.mingw.base.24974647.1215637920/appendContributed=true
 environment/buildEnvironmentInclude/cdt.managedbuild.toolchain.gnu.mingw.base.24974647/CPATH/delimiter=;
 environment/buildEnvironmentInclude/cdt.managedbuild.toolchain.gnu.mingw.base.24974647/CPATH/operation=replace
-environment/buildEnvironmentInclude/cdt.managedbuild.toolchain.gnu.mingw.base.24974647/CPATH/value=C\:/PROGRA~1/Gambit/v4.8.1/include
+environment/buildEnvironmentInclude/cdt.managedbuild.toolchain.gnu.mingw.base.24974647/CPATH/value=
 environment/buildEnvironmentInclude/cdt.managedbuild.toolchain.gnu.mingw.base.24974647/C_INCLUDE_PATH/delimiter=;
 environment/buildEnvironmentInclude/cdt.managedbuild.toolchain.gnu.mingw.base.24974647/C_INCLUDE_PATH/operation=append
 environment/buildEnvironmentInclude/cdt.managedbuild.toolchain.gnu.mingw.base.24974647/C_INCLUDE_PATH/value=E\:\\Develop\\C\\Katas\\lib\\cmocka-1.1.5_x64\\include;E\:\\Develop\\C\\ApprovalTests.c\\include
@@ -17,11 +17,11 @@ environment/buildEnvironmentInclude/cdt.managedbuild.toolchain.gnu.mingw.base.24
 environment/buildEnvironmentInclude/cdt.managedbuild.toolchain.gnu.mingw.base.24974647/appendContributed=true
 environment/buildEnvironmentLibrary/cdt.managedbuild.toolchain.gnu.mingw.base.24974647.1215637920/LIBRARY_PATH/delimiter=;
 environment/buildEnvironmentLibrary/cdt.managedbuild.toolchain.gnu.mingw.base.24974647.1215637920/LIBRARY_PATH/operation=replace
-environment/buildEnvironmentLibrary/cdt.managedbuild.toolchain.gnu.mingw.base.24974647.1215637920/LIBRARY_PATH/value=C\:/PROGRA~1/Gambit/v4.8.1/lib;E\:\\Develop\\C\\Katas\\lib\\cmocka-1.1.5_x64\\lib;E\:\\Develop\\C\\ApprovalTests.c\\lib
+environment/buildEnvironmentLibrary/cdt.managedbuild.toolchain.gnu.mingw.base.24974647.1215637920/LIBRARY_PATH/value=E\:\\Develop\\C\\Katas\\lib\\cmocka-1.1.5_x64\\lib;E\:\\Develop\\C\\ApprovalTests.c\\lib
 environment/buildEnvironmentLibrary/cdt.managedbuild.toolchain.gnu.mingw.base.24974647.1215637920/append=true
 environment/buildEnvironmentLibrary/cdt.managedbuild.toolchain.gnu.mingw.base.24974647.1215637920/appendContributed=true
 environment/buildEnvironmentLibrary/cdt.managedbuild.toolchain.gnu.mingw.base.24974647/LIBRARY_PATH/delimiter=;
 environment/buildEnvironmentLibrary/cdt.managedbuild.toolchain.gnu.mingw.base.24974647/LIBRARY_PATH/operation=replace
-environment/buildEnvironmentLibrary/cdt.managedbuild.toolchain.gnu.mingw.base.24974647/LIBRARY_PATH/value=C\:/PROGRA~1/Gambit/v4.8.1/lib;E\:\\Develop\\C\\Katas\\lib\\cmocka-1.1.5_x64\\lib;E\:\\Develop\\C\\ApprovalTests.c\\lib
+environment/buildEnvironmentLibrary/cdt.managedbuild.toolchain.gnu.mingw.base.24974647/LIBRARY_PATH/value=E\:\\Develop\\C\\Katas\\lib\\cmocka-1.1.5_x64\\lib;E\:\\Develop\\C\\ApprovalTests.c\\lib
 environment/buildEnvironmentLibrary/cdt.managedbuild.toolchain.gnu.mingw.base.24974647/append=true
 environment/buildEnvironmentLibrary/cdt.managedbuild.toolchain.gnu.mingw.base.24974647/appendContributed=true
