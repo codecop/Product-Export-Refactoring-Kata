@@ -3,9 +3,7 @@
 #include "Price.h"
 #include "Product.h"
 #include "Store.h"
-#include "StringBuilder.h"
 #include "TaxCalculator.h"
-#include "Util.h"
 #include "XmlBuilder.h"
 #include <stdlib.h>
 
@@ -79,9 +77,6 @@ const char* xml_export_tax_details(struct LinkedList* orders)
         xml_open(xml, "order");
         xml_attribute_date(xml, "date", get_order_date(order));
 
-        /* TODO move tax calculation out of export */
-        double tax = 0.0;
-
         const struct LinkedList* products = get_order_products(order);
         for (const struct LinkedList* node = products; node; node = node->next) {
             const struct Product* product = (const struct Product*)node->data;
@@ -91,21 +86,12 @@ const char* xml_export_tax_details(struct LinkedList* orders)
             xml_text_s(xml, get_product_name(product));
             xml_close(xml, "product");
 
-            if (is_product_event(product))
-                tax += get_price_amount_in_currency(get_product_price(product), "USD") * 0.25;
-            else
-                tax += get_price_amount_in_currency(get_product_price(product), "USD") * 0.175;
-
         }
 
         xml_open(xml, "orderTax");
         xml_attribute_s(xml, "currency", "USD");
 
-        if (get_order_date(order) < from_iso_date("2018-01-01T00:00Z"))
-            tax += 10;
-        else
-            tax += 20;
-
+        double tax = order_tax(order);
         xml_text_d(xml, tax);
 
         xml_close(xml, "orderTax");

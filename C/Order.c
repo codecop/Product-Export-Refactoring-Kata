@@ -5,6 +5,7 @@
 #include "LinkedList.h"
 #include "Product.h"
 #include "Store.h"
+#include "Util.h"
 
 struct Order {
     const char* id;
@@ -35,6 +36,26 @@ double order_total_dollars(const struct Order* this)
         dollars += get_price_amount_in_currency(price, "USD");
     }
     return dollars;
+}
+
+double order_tax(const struct Order* this)
+{
+    double tax = 0.0;
+
+    for (const struct LinkedList* node = this->products; node; node = node->next) {
+        const struct Product* product = (const struct Product*)node->data;
+        if (is_product_event(product))
+            tax += get_price_amount_in_currency(get_product_price(product), "USD") * 0.25;
+        else
+            tax += get_price_amount_in_currency(get_product_price(product), "USD") * 0.175;
+    }
+
+    if (this->date < from_iso_date("2018-01-01T00:00Z"))
+        tax += 10;
+    else
+        tax += 20;
+
+    return tax;
 }
 
 void save_order_to_database(const struct Order* this)
