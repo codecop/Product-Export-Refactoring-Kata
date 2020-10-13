@@ -5,8 +5,8 @@
 #include "Store.h"
 #include "StringBuilder.h"
 #include "TaxCalculator.h"
-#include "XmlBuilder.h"
 #include "Util.h"
+#include "XmlBuilder.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -36,18 +36,14 @@ void xml_product(struct StringBuilder* xml, const struct Product* product, struc
 
     if (details & PRODUCT_DETAIL_WEIGHT) {
         if (get_product_weight(product) > 0) {
-            sb_append(xml, " weight='");
-            sb_append_long(xml, get_product_weight(product));
-            sb_append(xml, "'");
+            xml_attribute_l(xml, "weight", get_product_weight(product));
         }
     }
 
     if (details & PRODUCT_DETAIL_PRICE) {
         xml_open(xml, "price");
         xml_attribute_s(xml, "currency", get_price_currency(get_product_price(product)));
-
         xml_text_d(xml, get_price_amount(get_product_price(product)));
-
         xml_close(xml, "price");
     }
 
@@ -88,9 +84,7 @@ const char* xml_export_tax_details(struct LinkedList* orders)
         const struct Order* order = (const struct Order*)node->data;
         xml_open(xml, "order");
 
-        const char* formatted = make_iso_date_str(get_order_date(order));
-        xml_attribute_s(xml, "date", formatted);
-        free((void*)formatted);
+        xml_attribute_date(xml, "date", get_order_date(order));
 
         double tax = 0.0;
 
@@ -160,18 +154,14 @@ const char* xml_export_history(struct LinkedList* orders)
     xml_open(xml, "orderHistory");
 
     time_t now = time(NULL);
-    const char* formatted_now = make_iso_date_str(now);
-    xml_attribute_s(xml, "createdAt", formatted_now);
-    free((void*)formatted_now);
+    xml_attribute_date(xml, "createdAt", now);
 
     for (const struct LinkedList* node = orders; node; node = node->next) {
         const struct Order* order = (const struct Order*)node->data;
 
         xml_open(xml, "order");
 
-        const char* formatted_date = make_iso_date_str(get_order_date(order));
-        xml_attribute_s(xml, "date", formatted_date);
-        free((void*)formatted_date);
+        xml_attribute_date(xml, "date", get_order_date(order));
 
         xml_attribute_d(xml, "totalDollars", order_total_dollars(order));
 

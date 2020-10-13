@@ -2,7 +2,9 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "StringBuilder.h"
+#include "Util.h"
 
 struct StringBuilder* make_xml()
 {
@@ -56,6 +58,24 @@ void xml_attribute_d(struct StringBuilder* xml, const char* name, const double v
     const char* formatted_total = make_formatted_double(value);
     xml_attribute_s(xml, name, formatted_total);
     free((void*)formatted_total);
+}
+
+void xml_attribute_date(struct StringBuilder* xml, const char* name, const time_t value)
+{
+    const char* formatted = make_iso_date_str(value);
+    xml_attribute_s(xml, name, formatted);
+    free((void*)formatted);
+}
+
+void xml_attribute_l(struct StringBuilder* xml, const char* name, const long value)
+{
+    assert(xml_tag_is_open);
+
+    sb_append(xml, " ");
+    sb_append(xml, name);
+    sb_append(xml, "='");
+    sb_append_long(xml, value);
+    sb_append(xml, "'");
 }
 
 void xml_text_s(struct StringBuilder* xml, const char* text)
