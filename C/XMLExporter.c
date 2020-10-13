@@ -20,33 +20,37 @@ struct StringBuilder* make_xml()
     return xml;
 }
 
+void xml_attribute(struct StringBuilder* xml, const char* name, const char* value)
+{
+    sb_append(xml, " ");
+    sb_append(xml, name);
+    sb_append(xml, "='");
+    sb_append(xml, value);
+    sb_append(xml, "'");
+}
+
 #define PRODUCT_DETAIL_NONE 0
 #define PRODUCT_DETAIL_STYLIST 1
 #define PRODUCT_DETAIL_WEIGHT 2
 #define PRODUCT_DETAIL_PRICE 4
 #define PRODUCT_DETAIL_LOCATION 8
 
-void xml_product(struct StringBuilder* xml, const struct Product* product, struct Store* store, unsigned int details)
+void xml_product(struct StringBuilder* xml, const struct Product* product, struct Store* store,
+        unsigned int details)
 {
     sb_append(xml, "<product");
 
-    sb_append(xml, " id='");
-    sb_append(xml, get_product_id(product));
-    sb_append(xml, "'");
+    xml_attribute(xml, "id", get_product_id(product));
 
     if (details & PRODUCT_DETAIL_STYLIST) {
         if (is_product_event(product)) {
-            sb_append(xml, " stylist='");
-            sb_append(xml, stylist_for(product));
-            sb_append(xml, "'");
+            xml_attribute(xml, "stylist", stylist_for(product));
         }
     }
 
     if (details & PRODUCT_DETAIL_LOCATION) {
         if (is_product_event(product)) {
-            sb_append(xml, " location='");
-            sb_append(xml, get_store_name(store));
-            sb_append(xml, "'");
+            xml_attribute(xml, "location", get_store_name(store));
         }
     }
 
@@ -61,9 +65,8 @@ void xml_product(struct StringBuilder* xml, const struct Product* product, struc
 
     if (details & PRODUCT_DETAIL_PRICE) {
         sb_append(xml, "<price");
-        sb_append(xml, " currency='");
-        sb_append(xml, get_price_currency(get_product_price(product)));
-        sb_append(xml, "'>");
+        xml_attribute(xml, "currency", get_price_currency(get_product_price(product)));
+        sb_append(xml, ">");
 
         const char* formatted = make_formatted_double(get_price_amount(get_product_price(product)));
         sb_append(xml, formatted);
@@ -83,9 +86,8 @@ const char* xml_export_full(const struct LinkedList* orders)
     for (const struct LinkedList* node = orders; node; node = node->next) {
         const struct Order* order = (const struct Order*)node->data;
         sb_append(xml, "<order");
-        sb_append(xml, " id='");
-        sb_append(xml, get_order_id(order));
-        sb_append(xml, "'>");
+        xml_attribute(xml, "id", get_order_id(order));
+        sb_append(xml, ">");
         const struct LinkedList* products = get_order_products(order);
         for (const struct LinkedList* node = products; node; node = node->next) {
             const struct Product* product = (const struct Product*)node->data;
@@ -106,11 +108,8 @@ const char* xml_export_tax_details(struct LinkedList* orders)
     for (const struct LinkedList* node = orders; node; node = node->next) {
         const struct Order* order = (const struct Order*)node->data;
         sb_append(xml, "<order");
-        sb_append(xml, " date='");
         const char* formatted = make_iso_date_str(get_order_date(order));
-        sb_append(xml, formatted);
-        free((void*)formatted);
-        sb_append(xml, "'");
+        xml_attribute(xml, "date", formatted);
         sb_append(xml, ">");
         double tax = 0.0;
         const struct LinkedList* products = get_order_products(order);
@@ -124,7 +123,9 @@ const char* xml_export_tax_details(struct LinkedList* orders)
 
         }
 
-        sb_append(xml, "<orderTax currency='USD'>");
+        sb_append(xml, "<orderTax");
+        xml_attribute(xml, "currency", "USD");
+        sb_append(xml, ">");
         if (get_order_date(order) < from_iso_date("2018-01-01T00:00Z"))
             tax += 10;
         else
@@ -155,9 +156,7 @@ const char* xml_export_store(struct Store* store)
 {
     struct StringBuilder* xml = make_xml();
     sb_append(xml, "<store");
-    sb_append(xml, " name='");
-    sb_append(xml, get_store_name(store));
-    sb_append(xml, "'");
+    xml_attribute(xml, "name", get_store_name(store));
     sb_append(xml, ">");
     const struct LinkedList* products = get_store_stock(store);
     for (const struct LinkedList* node = products; node; node = node->next) {
@@ -174,33 +173,24 @@ const char* xml_export_history(struct LinkedList* orders)
 {
     struct StringBuilder* xml = make_xml();
     sb_append(xml, "<orderHistory");
-    sb_append(xml, " createdAt='");
     time_t now = time(NULL);
     const char* formatted_now = make_iso_date_str(now);
-    sb_append(xml, formatted_now);
-    free((void*)formatted_now);
-    sb_append(xml, "'");
+    xml_attribute(xml, "createdAt", formatted_now);
     sb_append(xml, ">");
     for (const struct LinkedList* node = orders; node; node = node->next) {
         const struct Order* order = (const struct Order*)node->data;
         sb_append(xml, "<order");
-        sb_append(xml, " date='");
         const char* formatted_date = make_iso_date_str(get_order_date(order));
-        sb_append(xml, formatted_date);
+        xml_attribute(xml, "date", formatted_date);
         free((void*)formatted_date);
-        sb_append(xml, "'");
-        sb_append(xml, " totalDollars='");
         const char* formatted_total = make_formatted_double(order_total_dollars(order));
-        sb_append(xml, formatted_total);
-        free((void*)formatted_total);
-        sb_append(xml, "'>");
+        xml_attribute(xml, "totalDollars", formatted_total);
+        sb_append(xml, ">");
         const struct LinkedList* products = get_order_products(order);
         for (const struct LinkedList* node = products; node; node = node->next) {
             const struct Product* product = (const struct Product*)node->data;
             sb_append(xml, "<product");
-            sb_append(xml, " id='");
-            sb_append(xml, get_product_id(product));
-            sb_append(xml, "'");
+            xml_attribute(xml, "id", get_product_id(product));
             sb_append(xml, ">");
             sb_append(xml, get_product_name(product));
             sb_append(xml, "</product>");
