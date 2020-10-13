@@ -62,6 +62,8 @@ const char* xml_export_full(const struct LinkedList* orders)
     return xml_string(xml);
 }
 
+static void export_plain_product(struct StringBuilder* xml, const struct Product* product);
+
 const char* xml_export_tax_details(struct LinkedList* orders)
 {
     struct StringBuilder* xml = make_xml();
@@ -73,18 +75,12 @@ const char* xml_export_tax_details(struct LinkedList* orders)
         xml_attribute_date(xml, "date", get_order_date(order));
 
         linked_list_each(const struct Product*, product, get_order_products(order),
-            xml_open(xml, "product");
-            xml_attribute_s(xml, "id", get_product_id(product));
-            xml_text_s(xml, get_product_name(product));
-            xml_close(xml, "product");
+            export_plain_product(xml, product);
         )
 
         xml_open(xml, "orderTax");
         xml_attribute_s(xml, "currency", "USD");
-
-        double tax = order_tax(order);
-        xml_text_d(xml, tax);
-
+        xml_text_d(xml, order_tax(order));
         xml_close(xml, "orderTax");
 
         xml_close(xml, "order");
@@ -119,32 +115,43 @@ const char* xml_export_store(struct Store* store)
     return xml_string(xml);
 }
 
+static void export_order_history(struct StringBuilder* xml, struct LinkedList* orders);
+static void export_order_history_order(struct StringBuilder* xml, const struct Order* order);
+
 const char* xml_export_history(struct LinkedList* orders)
 {
     struct StringBuilder* xml = make_xml();
+    export_order_history(xml, orders);
+    return xml_string(xml);
+}
 
+static void export_order_history(struct StringBuilder* xml, struct LinkedList* orders)
+{
     xml_open(xml, "orderHistory");
     xml_attribute_date(xml, "createdAt", time(NULL));
-
     linked_list_each(const struct Order*, order, orders,
-
-        xml_open(xml, "order");
-        xml_attribute_date(xml, "date", get_order_date(order));
-        xml_attribute_d(xml, "totalDollars", order_total_dollars(order));
-
-        linked_list_each(const struct Product*, product, get_order_products(order),
-            xml_open(xml, "product");
-            xml_attribute_s(xml, "id", get_product_id(product));
-            xml_text_s(xml, get_product_name(product));
-            xml_close(xml, "product");
-        )
-
-        xml_close(xml, "order");
+        export_order_history_order(xml, order);
     )
-
     xml_close(xml, "orderHistory");
+}
 
-    return xml_string(xml);
+static void export_order_history_order(struct StringBuilder* xml, const struct Order* order)
+{
+    xml_open(xml, "order");
+    xml_attribute_date(xml, "date", get_order_date(order));
+    xml_attribute_d(xml, "totalDollars", order_total_dollars(order));
+    linked_list_each(const struct Product*, product, get_order_products(order),
+        export_plain_product(xml, product);
+    )
+    xml_close(xml, "order");
+}
+
+static void export_plain_product(struct StringBuilder* xml, const struct Product* product)
+{
+    xml_open(xml, "product");
+    xml_attribute_s(xml, "id", get_product_id(product));
+    xml_text_s(xml, get_product_name(product));
+    xml_close(xml, "product");
 }
 
 static const char* stylist_for(const struct Product* product)
