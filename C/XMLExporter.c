@@ -41,54 +41,62 @@ static void export_store_product(struct StringBuilder* xml, struct Store* store,
     xml_close(xml, "product");
 }
 
-void xml_product(struct StringBuilder* xml, const struct Product* product, unsigned int details)
+static void export_product_price(struct StringBuilder* xml, const struct Product* product)
 {
-    if (details & PRODUCT_DETAIL_WEIGHT) {
-        if (get_product_weight(product) > 0) {
-            xml_attribute_l(xml, "weight", get_product_weight(product));
-        }
+    xml_open(xml, "price");
+    xml_attribute_s(xml, "currency", get_price_currency(get_product_price(product)));
+    xml_text_d(xml, get_price_amount(get_product_price(product)));
+    xml_close(xml, "price");
+}
+
+static void export_full_product(struct StringBuilder* xml, const struct Product* product)
+{
+    xml_open(xml, "product");
+    xml_attribute_s(xml, "id", get_product_id(product));
+
+    if (is_product_event(product)) {
+        xml_attribute_s(xml, "stylist", stylist_for(product));
     }
 
-    if (details & PRODUCT_DETAIL_PRICE) {
-        xml_open(xml, "price");
-        xml_attribute_s(xml, "currency", get_price_currency(get_product_price(product)));
-        xml_text_d(xml, get_price_amount(get_product_price(product)));
-        xml_close(xml, "price");
+    if (get_product_weight(product) > 0) {
+        xml_attribute_l(xml, "weight", get_product_weight(product));
     }
+
+    export_product_price(xml, product);
+    xml_text_s(xml, get_product_name(product));
+    xml_close(xml, "product");
 
 }
+
+static void export_full_order(struct StringBuilder* xml, const struct Order* order);
+static void export_full_orders(struct StringBuilder* xml, const struct LinkedList* orders);
 
 const char* xml_export_full(const struct LinkedList* orders)
 {
     struct StringBuilder* xml = make_xml();
+    export_full_orders(xml, orders);
+    return xml_string(xml);
+}
 
+static void export_full_orders(struct StringBuilder* xml, const struct LinkedList* orders)
+{
     xml_open(xml, "orders");
-
     linked_list_each(const struct Order*, order, orders,
+        export_full_order(xml, order);
+    )
+    xml_close(xml, "orders");
+}
 
-        xml_open(xml, "order");
-        xml_attribute_s(xml, "id", get_order_id(order));
+static void export_full_order(struct StringBuilder* xml, const struct Order* order)
+{
+    xml_open(xml, "order");
+    xml_attribute_s(xml, "id", get_order_id(order));
 
-        linked_list_each(const struct Product*, product, get_order_products(order),
-
-            xml_open(xml, "product");
-            xml_attribute_s(xml, "id", get_product_id(product));
-            if (is_product_event(product)) {
-                xml_attribute_s(xml, "stylist", stylist_for(product));
-            }
-
-            xml_product(xml, product, PRODUCT_DETAIL_WEIGHT | PRODUCT_DETAIL_PRICE);
-
-            xml_text_s(xml, get_product_name(product));
-            xml_close(xml, "product");
-        )
-
-        xml_close(xml, "order");
+    linked_list_each(const struct Product*, product, get_order_products(order),
+        export_full_product(xml, product);
     )
 
-    xml_close(xml, "orders");
-
-    return xml_string(xml);
+    xml_close(xml, "order");
 }
 
 static void export_tax_detail_orders(struct StringBuilder* xml, struct LinkedList* orders);
@@ -149,7 +157,7 @@ static void export_store(struct StringBuilder* xml, struct Store* store)
     xml_open(xml, "store");
     xml_attribute_s(xml, "name", get_store_name(store));
     linked_list_each(const struct Product*, product, get_store_stock(store),
-        export_store_product(xml, store, product);
+         export_store_product(xml, store, product);
     )
     xml_close(xml, "store");
 }
