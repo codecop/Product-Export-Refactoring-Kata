@@ -10,10 +10,8 @@
  * or beauty product launch evening reception
  */
 
-struct Product* make_store_event(const char* name,
-                                 const char* id,
-                                 struct Store* location,
-                                 const struct Price* price)
+struct Product* make_store_event(const char* name, const char* id, struct Store* location,
+        const struct Price* price)
 {
     void store_event_set_location(struct Product*, struct Store*);
 

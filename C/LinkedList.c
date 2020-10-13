@@ -9,7 +9,7 @@ struct LinkedList* make_linked_list(void)
 
 void linked_list_append(struct LinkedList** head, const void* data)
 {
-    struct LinkedList *new_node, *temp;
+    struct LinkedList* new_node, * temp;
 
     for (temp = *head; temp && temp->next; temp = temp->next)
         ;

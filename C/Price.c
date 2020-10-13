@@ -31,8 +31,7 @@ double get_price_amount_in_currency(const struct Price* this, const char* curren
         return this->amount;
     }
     else {
-        printf("Unsupported Operation %s\n",
-               "shouldn't call this from a unit test, it will do a slow db "
+        printf("Unsupported Operation %s\n", "shouldn't call this from a unit test, it will do a slow db "
                "lookup");
         exit(1);
     }

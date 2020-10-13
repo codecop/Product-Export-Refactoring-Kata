@@ -10,7 +10,7 @@ struct LinkedMap* make_linked_map(void)
 
 void linked_map_put(struct LinkedMap** head, const char* name, const void* data)
 {
-    struct LinkedMap *new_node, *temp;
+    struct LinkedMap* new_node, * temp;
 
     for (temp = *head; temp && temp->next; temp = temp->next)
         ;

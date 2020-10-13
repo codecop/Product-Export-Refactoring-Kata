@@ -40,8 +40,7 @@ double order_total_dollars(const struct Order* this)
 void save_order_to_database(const struct Order* this)
 {
     (void)this; /* unused */
-    printf("Unsupported Operation %s\n",
-           "missing from this exercise - shouldn't be called from a unit test");
+    printf("Unsupported Operation %s\n", "missing from this exercise - shouldn't be called from a unit test");
     exit(1);
 }
 

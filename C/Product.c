@@ -26,8 +26,7 @@ struct Product* make_product(const char* name, const char* id, int weight, const
 void save_product_to_database(const struct Product* this)
 {
     (void)this; /* unused */
-    printf("Unsupported Operation %s\n",
-           "missing from this exercise - shouldn't be called from a unit test");
+    printf("Unsupported Operation %s\n", "missing from this exercise - shouldn't be called from a unit test");
     exit(1);
 }
 
