@@ -10,9 +10,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-static const char* stylist_for(const struct Product*);
-static const char* make_formatted_double(double);
-
 struct StringBuilder* make_xml()
 {
     struct StringBuilder* xml = make_sb();
@@ -29,11 +26,10 @@ void xml_attribute(struct StringBuilder* xml, const char* name, const char* valu
     sb_append(xml, "'");
 }
 
-#define PRODUCT_DETAIL_NONE 0
-#define PRODUCT_DETAIL_STYLIST 1
-#define PRODUCT_DETAIL_WEIGHT 2
-#define PRODUCT_DETAIL_PRICE 4
-#define PRODUCT_DETAIL_LOCATION 8
+void xml_text(struct StringBuilder* xml, const char* text)
+{
+    sb_append(xml, text);
+}
 
 void xml_close(struct StringBuilder* xml, const char* name)
 {
@@ -41,6 +37,16 @@ void xml_close(struct StringBuilder* xml, const char* name)
     sb_append(xml, name);
     sb_append(xml, ">");
 }
+
+static const char* stylist_for(const struct Product*);
+static const char* make_formatted_double(double);
+
+#define PRODUCT_DETAIL_NONE 0
+#define PRODUCT_DETAIL_STYLIST 1
+#define PRODUCT_DETAIL_WEIGHT 2
+#define PRODUCT_DETAIL_PRICE 4
+#define PRODUCT_DETAIL_LOCATION 8
+
 
 void xml_product(struct StringBuilder* xml, const struct Product* product, struct Store* store,
         unsigned int details)
@@ -76,7 +82,7 @@ void xml_product(struct StringBuilder* xml, const struct Product* product, struc
         sb_append(xml, ">");
 
         const char* formatted = make_formatted_double(get_price_amount(get_product_price(product)));
-        sb_append(xml, formatted);
+        xml_text(xml, formatted);
         free((void*)formatted);
 
         xml_close(xml, "price");
@@ -138,7 +144,7 @@ const char* xml_export_tax_details(struct LinkedList* orders)
         else
             tax += 20;
         const char* formatted_tax = make_formatted_double(tax);
-        sb_append(xml, formatted_tax);
+        xml_text(xml, formatted_tax);
         free((void*)formatted_tax);
         xml_close(xml, "orderTax");
         xml_close(xml, "order");
@@ -146,7 +152,7 @@ const char* xml_export_tax_details(struct LinkedList* orders)
 
     double total_tax = calculate_added_tax(orders);
     const char* formatted_total_tax = make_formatted_double(total_tax);
-    sb_append(xml, formatted_total_tax);
+    xml_text(xml, formatted_total_tax);
     free((void*)formatted_total_tax);
     xml_close(xml, "orderTax");
     return sb_string(xml);
