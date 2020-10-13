@@ -13,10 +13,16 @@
 static const char* stylist_for(const struct Product*);
 static const char* make_formatted_double(double);
 
-const char* xml_export_full(const struct LinkedList* orders)
+struct StringBuilder* make_xml()
 {
     struct StringBuilder* xml = make_sb();
     sb_append(xml, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+    return xml;
+}
+
+const char* xml_export_full(const struct LinkedList* orders)
+{
+    struct StringBuilder* xml = make_xml();
     sb_append(xml, "<orders>");
     for (const struct LinkedList* node = orders; node; node = node->next) {
         const struct Order* order = (const struct Order*)node->data;
@@ -65,8 +71,7 @@ const char* xml_export_full(const struct LinkedList* orders)
 
 const char* xml_export_tax_details(struct LinkedList* orders)
 {
-    struct StringBuilder* xml = make_sb();
-    sb_append(xml, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+    struct StringBuilder* xml = make_xml();
     sb_append(xml, "<orderTax>");
     for (const struct LinkedList* node = orders; node; node = node->next) {
         const struct Order* order = (const struct Order*)node->data;
@@ -124,8 +129,7 @@ static const char* make_formatted_double(double d)
 
 const char* xml_export_store(struct Store* store)
 {
-    struct StringBuilder* xml = make_sb();
-    sb_append(xml, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+    struct StringBuilder* xml = make_xml();
     sb_append(xml, "<store");
     sb_append(xml, " name='");
     sb_append(xml, get_store_name(store));
@@ -169,8 +173,7 @@ const char* xml_export_store(struct Store* store)
 
 const char* xml_export_history(struct LinkedList* orders)
 {
-    struct StringBuilder* xml = make_sb();
-    sb_append(xml, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+    struct StringBuilder* xml = make_xml();
     sb_append(xml, "<orderHistory");
     sb_append(xml, " createdAt='");
     time_t now = time(NULL);
