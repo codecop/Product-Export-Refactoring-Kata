@@ -35,6 +35,13 @@ void xml_attribute(struct StringBuilder* xml, const char* name, const char* valu
 #define PRODUCT_DETAIL_PRICE 4
 #define PRODUCT_DETAIL_LOCATION 8
 
+void xml_close(struct StringBuilder* xml, const char* name)
+{
+    sb_append(xml, "</");
+    sb_append(xml, name);
+    sb_append(xml, ">");
+}
+
 void xml_product(struct StringBuilder* xml, const struct Product* product, struct Store* store,
         unsigned int details)
 {
@@ -72,11 +79,11 @@ void xml_product(struct StringBuilder* xml, const struct Product* product, struc
         sb_append(xml, formatted);
         free((void*)formatted);
 
-        sb_append(xml, "</price>");
+        xml_close(xml, "price");
     }
 
     sb_append(xml, get_product_name(product));
-    sb_append(xml, "</product>");
+    xml_close(xml, "product");
 }
 
 const char* xml_export_full(const struct LinkedList* orders)
@@ -94,10 +101,10 @@ const char* xml_export_full(const struct LinkedList* orders)
             xml_product(xml, product, NULL, PRODUCT_DETAIL_STYLIST | PRODUCT_DETAIL_WEIGHT | PRODUCT_DETAIL_PRICE);
         }
 
-        sb_append(xml, "</order>");
+        xml_close(xml, "order");
     }
 
-    sb_append(xml, "</orders>");
+    xml_close(xml, "orders");
     return sb_string(xml);
 }
 
@@ -133,15 +140,15 @@ const char* xml_export_tax_details(struct LinkedList* orders)
         const char* formatted_tax = make_formatted_double(tax);
         sb_append(xml, formatted_tax);
         free((void*)formatted_tax);
-        sb_append(xml, "</orderTax>");
-        sb_append(xml, "</order>");
+        xml_close(xml, "orderTax");
+        xml_close(xml, "order");
     }
 
     double total_tax = calculate_added_tax(orders);
     const char* formatted_total_tax = make_formatted_double(total_tax);
     sb_append(xml, formatted_total_tax);
     free((void*)formatted_total_tax);
-    sb_append(xml, "</orderTax>");
+    xml_close(xml, "orderTax");
     return sb_string(xml);
 }
 
@@ -164,7 +171,7 @@ const char* xml_export_store(struct Store* store)
         xml_product(xml, product, store, PRODUCT_DETAIL_LOCATION | PRODUCT_DETAIL_WEIGHT | PRODUCT_DETAIL_PRICE);
     }
 
-    sb_append(xml, "</store>");
+    xml_close(xml, "store");
 
     return sb_string(xml);
 }
@@ -193,13 +200,13 @@ const char* xml_export_history(struct LinkedList* orders)
             xml_attribute(xml, "id", get_product_id(product));
             sb_append(xml, ">");
             sb_append(xml, get_product_name(product));
-            sb_append(xml, "</product>");
+            xml_close(xml, "product");
         }
 
-        sb_append(xml, "</order>");
+        xml_close(xml, "order");
     }
 
-    sb_append(xml, "</orderHistory>");
+    xml_close(xml, "orderHistory");
     return sb_string(xml);
 }
 
