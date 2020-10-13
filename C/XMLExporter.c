@@ -7,13 +7,11 @@
 #include "TaxCalculator.h"
 #include "XmlBuilder.h"
 #include "Util.h"
-#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
 static const char* stylist_for(const struct Product*);
-static const char* make_formatted_double(double);
 
 #define PRODUCT_DETAIL_NONE 0
 #define PRODUCT_DETAIL_STYLIST 1
@@ -26,13 +24,13 @@ void xml_product(struct StringBuilder* xml, const struct Product* product, struc
 {
     if (details & PRODUCT_DETAIL_STYLIST) {
         if (is_product_event(product)) {
-            xml_attribute(xml, "stylist", stylist_for(product));
+            xml_attribute_s(xml, "stylist", stylist_for(product));
         }
     }
 
     if (details & PRODUCT_DETAIL_LOCATION) {
         if (is_product_event(product)) {
-            xml_attribute(xml, "location", get_store_name(store));
+            xml_attribute_s(xml, "location", get_store_name(store));
         }
     }
 
@@ -46,11 +44,9 @@ void xml_product(struct StringBuilder* xml, const struct Product* product, struc
 
     if (details & PRODUCT_DETAIL_PRICE) {
         xml_open(xml, "price");
-        xml_attribute(xml, "currency", get_price_currency(get_product_price(product)));
+        xml_attribute_s(xml, "currency", get_price_currency(get_product_price(product)));
 
-        const char* formatted = make_formatted_double(get_price_amount(get_product_price(product)));
-        xml_text(xml, formatted);
-        free((void*)formatted);
+        xml_text_d(xml, get_price_amount(get_product_price(product)));
 
         xml_close(xml, "price");
     }
@@ -64,16 +60,16 @@ const char* xml_export_full(const struct LinkedList* orders)
     for (const struct LinkedList* node = orders; node; node = node->next) {
         const struct Order* order = (const struct Order*)node->data;
         xml_open(xml, "order");
-        xml_attribute(xml, "id", get_order_id(order));
+        xml_attribute_s(xml, "id", get_order_id(order));
         const struct LinkedList* products = get_order_products(order);
         for (const struct LinkedList* node = products; node; node = node->next) {
             const struct Product* product = (const struct Product*)node->data;
             xml_open(xml, "product");
-            xml_attribute(xml, "id", get_product_id(product));
+            xml_attribute_s(xml, "id", get_product_id(product));
 
             xml_product(xml, product, NULL, PRODUCT_DETAIL_STYLIST | PRODUCT_DETAIL_WEIGHT | PRODUCT_DETAIL_PRICE);
 
-            xml_text(xml, get_product_name(product));
+            xml_text_s(xml, get_product_name(product));
             xml_close(xml, "product");
         }
 
@@ -93,7 +89,7 @@ const char* xml_export_tax_details(struct LinkedList* orders)
         xml_open(xml, "order");
 
         const char* formatted = make_iso_date_str(get_order_date(order));
-        xml_attribute(xml, "date", formatted);
+        xml_attribute_s(xml, "date", formatted);
         free((void*)formatted);
 
         double tax = 0.0;
@@ -102,8 +98,8 @@ const char* xml_export_tax_details(struct LinkedList* orders)
         for (const struct LinkedList* node = products; node; node = node->next) {
             const struct Product* product = (const struct Product*)node->data;
             xml_open(xml, "product");
-            xml_attribute(xml, "id", get_product_id(product));
-            xml_text(xml, get_product_name(product));
+            xml_attribute_s(xml, "id", get_product_id(product));
+            xml_text_s(xml, get_product_name(product));
             xml_close(xml, "product");
 
             if (is_product_event(product))
@@ -114,15 +110,14 @@ const char* xml_export_tax_details(struct LinkedList* orders)
         }
 
         xml_open(xml, "orderTax");
-        xml_attribute(xml, "currency", "USD");
+        xml_attribute_s(xml, "currency", "USD");
 
         if (get_order_date(order) < from_iso_date("2018-01-01T00:00Z"))
             tax += 10;
         else
             tax += 20;
-        const char* formatted_tax = make_formatted_double(tax);
-        xml_text(xml, formatted_tax);
-        free((void*)formatted_tax);
+
+        xml_text_d(xml, tax);
 
         xml_close(xml, "orderTax");
 
@@ -130,36 +125,27 @@ const char* xml_export_tax_details(struct LinkedList* orders)
     }
 
     double total_tax = calculate_added_tax(orders);
-    const char* formatted_total_tax = make_formatted_double(total_tax);
-    xml_text(xml, formatted_total_tax);
-    free((void*)formatted_total_tax);
+    xml_text_d(xml, total_tax);
 
     xml_close(xml, "orderTax");
     return xml_string(xml);
-}
-
-static const char* make_formatted_double(double d)
-{
-    char* s = (char*)malloc(sizeof(char[24 + 1]));
-    sprintf(s, "%03.2f", d);
-    return s;
 }
 
 const char* xml_export_store(struct Store* store)
 {
     struct StringBuilder* xml = make_xml();
     xml_open(xml, "store");
-    xml_attribute(xml, "name", get_store_name(store));
+    xml_attribute_s(xml, "name", get_store_name(store));
 
     const struct LinkedList* products = get_store_stock(store);
     for (const struct LinkedList* node = products; node; node = node->next) {
         const struct Product* product = (const struct Product*)node->data;
         xml_open(xml, "product");
-        xml_attribute(xml, "id", get_product_id(product));
+        xml_attribute_s(xml, "id", get_product_id(product));
 
         xml_product(xml, product, store, PRODUCT_DETAIL_LOCATION | PRODUCT_DETAIL_WEIGHT | PRODUCT_DETAIL_PRICE);
 
-        xml_text(xml, get_product_name(product));
+        xml_text_s(xml, get_product_name(product));
         xml_close(xml, "product");
     }
 
@@ -175,7 +161,7 @@ const char* xml_export_history(struct LinkedList* orders)
 
     time_t now = time(NULL);
     const char* formatted_now = make_iso_date_str(now);
-    xml_attribute(xml, "createdAt", formatted_now);
+    xml_attribute_s(xml, "createdAt", formatted_now);
     free((void*)formatted_now);
 
     for (const struct LinkedList* node = orders; node; node = node->next) {
@@ -184,20 +170,18 @@ const char* xml_export_history(struct LinkedList* orders)
         xml_open(xml, "order");
 
         const char* formatted_date = make_iso_date_str(get_order_date(order));
-        xml_attribute(xml, "date", formatted_date);
+        xml_attribute_s(xml, "date", formatted_date);
         free((void*)formatted_date);
 
-        const char* formatted_total = make_formatted_double(order_total_dollars(order));
-        xml_attribute(xml, "totalDollars", formatted_total);
-        free((void*)formatted_total);
+        xml_attribute_d(xml, "totalDollars", order_total_dollars(order));
 
         const struct LinkedList* products = get_order_products(order);
         for (const struct LinkedList* node = products; node; node = node->next) {
             const struct Product* product = (const struct Product*)node->data;
 
             xml_open(xml, "product");
-            xml_attribute(xml, "id", get_product_id(product));
-            xml_text(xml, get_product_name(product));
+            xml_attribute_s(xml, "id", get_product_id(product));
+            xml_text_s(xml, get_product_name(product));
             xml_close(xml, "product");
 
         }
