@@ -13,6 +13,7 @@ describe("XMLExporter", () => {
         // expect(xml).toMatchSnapshot(); // Use snapshot testing
     });
 
+    // generated with "Test this" tooltip
     it('should generate a valid XML string with the correct version and encoding when given valid input', () => {
         // Arrange
         const orders: Order[] = [

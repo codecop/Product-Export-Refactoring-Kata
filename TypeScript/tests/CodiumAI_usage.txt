@@ -1,4 +1,4 @@
-> /test
+Variante> /test
 Listet einmal Test Fälle die recht sinnvoll sind aber ohne Test Daten.
 Listet auch weitere Möglichkeiten auf, das ist cool.
 "Run tests and autofix" ist nette Idee. Geht alles nicht, weil er 
@@ -7,17 +7,48 @@ Listet auch weitere Möglichkeiten auf, das ist cool.
  schreibt.
 AAA schaut gut aus.
 
-> List relevant test cases for exportFull based on branches
+---
+
+Variante> List relevant test cases for exportFull based on branches
 * Test case for an empty orders array:
 * Test case for a single order with no products:
 * Test case for a single order with a single product:
 * Test case for a product with an event:
 * Test case for a product with a non-zero weight:
-Das schaut ja sehr gut aus, der Code ist halt soso, XML schaut sinnvoll aus.
+Das schaut ja sehr gut aus, der Code ist halt so so, XML schaut sinnvoll aus.
 (besser als Codeium weil das ist nur allgemein)
 
-> Test tooltip "test this method"...
-* OK, aber Constructoren passen nicht.
+Test case for an empty orders array:
+Input: []
+Expected output: <?xml version="1.0" encoding="UTF-8"?>\n<orders></orders>
+
+Test case for a single order with no products:
+Input: [new Order()]
+Expected output: <?xml version="1.0" encoding="UTF-8"?>\n<orders>\n<order id=''>\n</order>\n</orders>
+
+Test case for a single order with a single product:
+Input: [new Order([new Product()])]
+Expected output: <?xml version="1.0" encoding="UTF-8"?>\n<orders>\n<order id=''>\n<product id=''></product>\n</order>\n</orders>
+
+Test case for a single order with multiple products:
+Input: [new Order([new Product(), new Product()])]
+Expected output: <?xml version="1.0" encoding="UTF-8"?>\n<orders>\n<order id=''>\n<product id=''></product>\n<product id=''></product>\n</order>\n</orders>
+
+Test case for a product with an event:
+Input: [new Order([new Product(true)])]
+Expected output: <?xml version="1.0" encoding="UTF-8"?>\n<orders>\n<order id=''>\n<product id='' stylist='Celeste Pulchritudo'></product>\n</order>\n</orders>
+
+Test case for a product with a non-zero weight:
+Input: [new Order([new Product(false, 1.5)])]
+Expected output: <?xml version="1.0" encoding="UTF-8"?>\n<orders>\n<order id=''>\n<product id='' weight='1.5'></product>\n</order>\n</orders>
+
+Aber der Chat ist kein Chat. Ich kann nichts sagen dort. Nur einzelne Fragen.
+
+---
+
+Variante> Test tooltip "test this method"...
+* OK, aber Konstruktoren passen nicht.
+* und oft No generated tests, please try again
 
 WIP
 
