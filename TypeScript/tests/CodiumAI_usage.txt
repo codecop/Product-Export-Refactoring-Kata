@@ -1,0 +1,64 @@
+> /test
+Listet einmal Test Fälle die recht sinnvoll sind aber ohne Test Daten.
+Listet auch weitere Möglichkeiten auf, das ist cool.
+"Run tests and autofix" ist nette Idee. Geht alles nicht, weil er 
+ const orders = [/* create an array of Order objects */];
+ expect(result).toBe(/* expected XML string */);
+ schreibt.
+AAA schaut gut aus.
+
+> List relevant test cases for exportFull based on branches
+* Test case for an empty orders array:
+* Test case for a single order with no products:
+* Test case for a single order with a single product:
+* Test case for a product with an event:
+* Test case for a product with a non-zero weight:
+Das schaut ja sehr gut aus, der Code ist halt soso, XML schaut sinnvoll aus.
+(besser als Codeium weil das ist nur allgemein)
+
+> Test tooltip "test this method"...
+* OK, aber Constructoren passen nicht.
+
+WIP
+
+> List necessary test cases for the selected block
+
+> change the tests 2-4 to test through public api. which tests are needed?
+(macht er nicht)
+
+> these tests do not work. create concrete instances of inventory and stats as needed
+> fill the properties with required values
+
+> does not compile, inventory takes an equipment
+> ...
+
+So geht es nicht bei komplexen Abhängigkeiten.
+
+> List test cases for selected calculateDamage and different scenarios following Right BICEP and CORRECT acronyms.
+NEIN
+
+> how many test cases do I need for calculateDamage?
+
+OK, das ist gut
+"Consider different combinations of base damage, damage modifiers, and soak values."
+Seufz.
+
+Er kennt den Code ja nicht, also weiß er es nicht. Muss alles pasten.
+
+Expected 5 arguments, got 6 (mit Ring)
+Aber immer wenn ich eine Klasse paste, wird das Ergebnis angepasst. Aber mühsam.
+
+---
+
+Work 1 hour
+Assess 0 (only need 1 test case)
+
+---
+
+20231107 Product-Export-Refactoring-Kata
+
+TODO
+- mühsam wenn er noch viele andere Klassen braucht. Fantasiert und erfindet.
+  muss alles pasten. Kann auch nichts berechnen.
+- eigentlich nur 1 branch, aber viele dependencies
+- mühsam gewesen, 50%
