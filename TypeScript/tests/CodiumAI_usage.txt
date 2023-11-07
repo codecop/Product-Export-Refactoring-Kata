@@ -50,19 +50,21 @@ Variante> Test tooltip "test this method"...
 * OK, aber Konstruktoren passen nicht.
 * und oft No generated tests, please try again
 
-WIP
-
 ---
 
 Work 1 hour
-Assess 0 (only need 1 test case)
+
+-
+
+Codeium to compare
+* real test cases with products and orders, but not matching constructors.
+* tests make sense and XML was correct but whitespace is bad...
 
 ---
 
 20231107 Product-Export-Refactoring-Kata
 
-TODO
-- mühsam wenn er noch viele andere Klassen braucht. Fantasiert und erfindet.
-  muss alles pasten. Kann auch nichts berechnen.
-- eigentlich nur 1 branch, aber viele dependencies
-- mühsam gewesen, 50%
+- schaut auf ersten Eindruck gut aus. AAA, mehr Context etc.
+- erstellt aber keine XML und keine sinnvollen Tests, oder?
+- hat einige Male nichts erstellt und es hat keinen Chat! Bad!
+- mühsam gewesen, 50%?

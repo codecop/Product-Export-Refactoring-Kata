@@ -35,11 +35,10 @@ describe("XMLExporter (CodiumAI)", () => {
 describe('exportFull (Codeium)', () => {
 
     it('should return correct XML for single order with single product', () => {
-        const order = new Order('1');
-        const product = new Product('1', 'Product 1', new Price('USD', 10), false, 0);
-        order.addProduct(product);
+        const product = new Product('Product 1', '1', 0, new Price(10, 'USD'));
+        const order = new Order('1', new Date(), new Store("S1", "Store 1", []), [product]);
 
-        const result = Order.exportFull([order]);
+        const result = XMLExporter.exportFull([order]);
 
         expect(result).toEqual(`
 <?xml version="1.0" encoding="UTF-8"?>
@@ -54,37 +53,32 @@ describe('exportFull (Codeium)', () => {
     });
 
     it('should include stylist for event product', () => {
-        const order = new Order('1');
-        const product = new Product('1', 'Product 1', new Price('USD', 10), true, 0);
-        order.addProduct(product);
+        const product = new Product('Product 1', '1', 0, new Price(10, 'USD'));
+        const order = new Order('1', new Date(), new Store("S1", "Store 1", []), [product]);
 
-        const result = Order.exportFull([order]);
+        const result = XMLExporter.exportFull([order]);
 
         expect(result).toContain(`<product id='1' stylist=''>`);
     });
 
     it('should include weight for product with weight > 0', () => {
-        const order = new Order('1');
-        const product = new Product('1', 'Product 1', new Price('USD', 10), false, 5);
-        order.addProduct(product);
+        const product = new Product('Product 1', '1', 5, new Price(10, 'USD'));
+        const order = new Order('1', new Date(), new Store("S1", "Store 1", []), [product]);
 
-        const result = Order.exportFull([order]);
+        const result = XMLExporter.exportFull([order]);
 
         expect(result).toContain(`<product id='1' weight='5'>`);
     });
 
     it('should return correct XML for multiple orders with multiple products', () => {
-        const order1 = new Order('1');
-        const product1 = new Product('1', 'Product 1', new Price('USD', 10), false, 0);
-        const product2 = new Product('2', 'Product 2', new Price('USD', 20), false, 0);
-        order1.addProduct(product1);
-        order1.addProduct(product2);
+        const product1 = new Product('Product 1', '1', 0, new Price(10, 'USD'));
+        const product2 = new Product('Product 2', '2', 0, new Price(20, 'USD'));
+        const order1 = new Order('1', new Date(), new Store("S1", "Store 1", []), [product1, product2]);
 
-        const order2 = new Order('2');
-        const product3 = new Product('3', 'Product 3', new Price('USD', 30), false, 0);
-        order2.addProduct(product3);
+        const product3 = new Product('Product 3', '3', 0, new Price(30, 'USD'));
+        const order2 = new Order('2', new Date(), new Store("S1", "Store 1", []), [product3]);
 
-        const result = Order.exportFull([order1, order2]);
+        const result = XMLExporter.exportFull([order1, order2]);
 
         expect(result).toEqual(`
     <?xml version="1.0" encoding="UTF-8"?>
@@ -107,4 +101,5 @@ describe('exportFull (Codeium)', () => {
       </order>
     </orders>`);
     });
+
 });
